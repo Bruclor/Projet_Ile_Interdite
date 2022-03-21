@@ -26,6 +26,18 @@ public class Zone {
     public Etat etat(){return this.etat;}
     public Artefact artefact(){return this.artefact;}
 
-
+    public String toString(){
+        String res = "";
+        if (this.artefact == Artefact.Eau) res += "E";
+        else if (this.artefact == Artefact.Terre) res += "T";
+        else if (this.artefact == Artefact.Feu) res += "F";
+        else if (this.artefact == Artefact.Air) res += "A";
+        else if (this.artefact == Artefact.Heliport) res += "H";
+        else res += "V";
+        if (this.etat == Etat.Normale) res += "N";
+        else if (this.etat == Etat.Inondee) res += "I";
+        else res += "S";
+        return res;
+    }
 
 }
