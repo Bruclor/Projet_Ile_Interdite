@@ -1,3 +1,3 @@
-public class Grille {
+public class Ile {
     private int taille;
 }
