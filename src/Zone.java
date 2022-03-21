@@ -1,10 +1,10 @@
-enum Artefact {Eau, Terre, Feu, Air, Heliport}
+enum Artefact {Eau, Terre, Feu, Air, Heliport, Vide}
 
 enum Etat {Normale, Inondee, Submergee}
 
 public class Zone {
-
-    /** Attributs **/
+    /*Une zone a des coordonnées x et y (abscisse et ordonnée)
+    * et peut etre un heliport ou avoir un artéfact ou etre vide*/
     private int x;
     private int y;
     private Etat etat;
