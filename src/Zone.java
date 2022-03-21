@@ -23,4 +23,9 @@ public class Zone {
     /** Methodes **/
     public int x(){return this.x;}
     public int y(){return this.y;}
+    public Etat etat(){return this.etat;}
+    public Artefact artefact(){return this.artefact;}
+
+
+
 }
