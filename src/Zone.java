@@ -12,10 +12,14 @@ public class Zone {
     private Etat etat;
     private Artefact artefact;
 
-    /** Constructeurs **/
-    public Zone(int x, int y, Etat etat, Artefact artefact){
-        this.x = x;
-        this.y = y;
+    /** Constructeurs
+     * @param x
+     * @param y
+     * @param etat
+     * @param vide**/
+    public Zone(int x, int y, Etat etat, Artefact vide){
+        this.x = this.x;
+        this.y = this.y;
         this.etat = etat;
         this.artefact = artefact;
     }
