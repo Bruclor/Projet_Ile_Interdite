@@ -29,14 +29,8 @@ public class Ile {
      * Methodes
      */
     public Zone zone(int x, int y){return grille[x][y];}
-
-    public Zone[][] getGrille() {
-        return grille;
-    }
-
-    public int getTaille() {
-        return taille;
-    }
+    public Zone[][] grille() {return this.grille;}
+    public int taille() {return this.taille;}
 
     public static void main (String[] args){
         System.out.println("coucou");
