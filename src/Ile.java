@@ -30,14 +30,8 @@ public class Ile {
      * Methodes
      */
     public Zone zone(int x, int y){return grille[x][y];}
-
-    public Zone[][] getGrille() {
-        return grille;
-    }
-
-    public int getTaille() {
-        return taille;
-    }
+    public Zone[][] grille() {return this.grille;}
+    public int taille() {return this.taille;}
 
     public void finDeTour(){
         Random random = new Random();
