@@ -30,10 +30,10 @@ public class ZoneWindow extends JFrame {
                     public void paintComponent(Graphics g) {
                         super.paintComponent(g);
                         g.setColor(Color.BLACK);
-                        for (int x=0; x<ile.getTaille(); x++){
-                            for (int y=0; y< ile.getTaille(); y++) {
-                                if (ile.getGrille()[x][y].etat() == Etat.Normale)g.setColor(Color.ORANGE.brighter());
-                                else if (ile.getGrille()[x][y].etat() == Etat.Inondee)g.setColor(Color.GRAY);
+                        for (int x=0; x<ile.taille(); x++){
+                            for (int y=0; y< ile.taille(); y++) {
+                                if (ile.grille()[x][y].etat() == Etat.Normale)g.setColor(Color.ORANGE.brighter());
+                                else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.GRAY);
                                 g.fillRect(105+x*100, 105+y*100, 90, 90);
                                 g.setColor(Color.BLACK);
                             }
