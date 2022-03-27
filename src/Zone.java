@@ -44,4 +44,9 @@ public class Zone {
         return res;
     }
 
+    public void inonde(){
+        if (this.etat == Etat.Normale) this.etat = Etat.Inondee;
+        else if (this.etat == Etat.Inondee) this.etat = Etat.Submergee;
+    }
+
 }

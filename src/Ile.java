@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.Random;
 
 public class Ile {
 
@@ -38,9 +39,20 @@ public class Ile {
         return taille;
     }
 
+    public void finDeTour(){
+        Random random = new Random();
+
+        int x1 = random.nextInt(this.taille);
+        int y1 = random.nextInt(this.taille);
+        this.grille[x1][y1].inonde();
+    }
+
     public static void main (String[] args){
         System.out.println("coucou");
         Ile ile = new Ile();
+        ile.finDeTour();
+        ile.finDeTour();
+        ile.finDeTour();
         JFrame Ile_Interdite = new ZoneWindow(ile);
         Ile_Interdite.setSize(800,800);
         Ile_Interdite.setVisible(true);
