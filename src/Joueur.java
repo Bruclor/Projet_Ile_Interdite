@@ -1,8 +1,13 @@
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Vector;
 
 public class Joueur {
-  
+
+  /** ATTRIBUTS
+   *  =========
+   */
+
   /* identifiant et nom du joueur */
   private int id;
   private String nom;
@@ -17,6 +22,10 @@ public class Joueur {
   
   /* Artefact en possession */
   Dictionary<Artefact, Integer> artefacts = new Hashtable<Artefact, Integer>(4);
+
+  /** METHODES
+   *  ========
+   */
 
   public Joueur(int id, String nom, int x, int y){
     this.coord.set_x(x);
@@ -58,10 +67,10 @@ public class Joueur {
   public void ajouteArtefact(Artefact art){this.artefacts.put(art,this.artefacts.get(art)+1);}
 
   /* Deplacements */
-  public void haut(){this.coord.set_y(this.coord.y()-1);}
-  public void bas(){this.coord.set_y(this.coord.y()+1);}
-  public void droite(){this.coord.set_x(this.coord.x()+1);}
-  public void gauche(){this.coord.set_y(this.coord.x()-1);}
+  public void deplace(Coord coord){
+    this.coord.set_x(coord.x());
+    this.coord.set_y(coord.y());
+  }
 
   /* Inventaire */
   public void getArtefact(Artefact artefact){
@@ -76,7 +85,7 @@ public class Joueur {
   }
 
   public void asseche(Zone zone){
-    if (zone.etat() == Etat.Inondee)
+    zone.asseche();
   }
 
   public void estElimine(){

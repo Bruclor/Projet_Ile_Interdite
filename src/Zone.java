@@ -51,4 +51,8 @@ public class Zone extends Coord{
         else if (this.etat == Etat.Inondee) this.etat = Etat.Submergee;
     }
 
+    public void asseche(){
+        if (this.etat == Etat.Inondee) this.etat = Etat.Normale;
+    }
+
 }

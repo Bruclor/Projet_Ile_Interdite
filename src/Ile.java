@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.util.Random;
+import java.util.Vector;
 
 public class Ile {
 
@@ -28,6 +29,7 @@ public class Ile {
         }
 
     }
+
     /**
     public InitJoueurs(int nb){
         this.joueurs = new Joueur[nb];
@@ -36,12 +38,28 @@ public class Ile {
         }
     }
     **/
+
     /**
      * Methodes
      */
     public Zone zone(int x, int y){return grille[x][y];}
     public Zone[][] grille() {return this.grille;}
     public int taille() {return this.taille;}
+    public Vector<Coord> adjacents(Zone zone){
+        Vector<Coord> adj = new Vector<Coord>();
+        if (zone.x() < this.taille-1){adj.add(new Coord(zone.x()+1, zone.y()));}
+        if (zone.x() > 0){adj.add(new Coord(zone.x()-1, zone.y()));}
+        if (zone.y() < this.taille-1){adj.add(new Coord(zone.x(), zone.y()+1));}
+        if (zone.y() > 0){adj.add(new Coord(zone.x()+1, zone.y()));}
+        return adj;
+    }
+
+    public void deplace(Joueur j, Zone dest){
+        Vector<Coord> adjacents = this.adjacents(this.zone(j.x(), j.y()));
+        if (adjacents.contains(dest) && zone(dest.x(), dest.y()).etat()!=Etat.Submergee){
+            j.deplace(dest);
+        }
+    }
 
     //petit bug
     public void finDeTour() {
