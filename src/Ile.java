@@ -61,32 +61,49 @@ public class Ile {
         }
     }
 
+    public void seche(Joueur j,Zone zone){
+        Vector<Coord> adjacents = this.adjacents(this.zone(j.x(), j.y()));
+        if ((adjacents.contains(zone) || (j.x() == zone.x() && j.y() == zone.y())) && zone(zone.x(), zone.y()).etat()==Etat.Inondee){
+            zone.asseche();
+        }
+    }
+
+    public void chercheCle(Joueur j){
+        Random random = new Random();
+        int r = random.nextInt(8);
+        if (r == 0) j.ajouteCle(Artefact.Air);
+        if (r == 1) j.ajouteCle(Artefact.Eau);
+        if (r == 2) j.ajouteCle(Artefact.Feu);
+        if (r == 3) j.ajouteCle(Artefact.Terre);
+        if (r == 4 || r == 5) grille[j.x()][j.y()].inonde();
+    }
+
     //petit bug
     public void finDeTour() {
-            Random random = new Random();
-            int x1;
-            int y1;
-            int x2;
-            int y2;
-            int x3;
-            int y3;
+        Random random = new Random();
+        int x1;
+        int y1;
+        int x2;
+        int y2;
+        int x3;
+        int y3;
 
-            do {
-                x1 = random.nextInt(this.taille);
-                y1 = random.nextInt(this.taille);
-            } while (this.grille[x1][y1].etat() == Etat.Submergee);
-            do {
-                x2 = random.nextInt(this.taille);
-                y2 = random.nextInt(this.taille);
-            } while (this.grille[x2][y2].etat() == Etat.Submergee || (x2 == x1 && y2 == y1));
-            do {
-                x3 = random.nextInt(this.taille);
-                y3 = random.nextInt(this.taille);
-            } while (this.grille[x3][y3].etat() == Etat.Submergee || (x3 == x1 && y3 == y1) || (x3 == x2 && y3 == y2));
-            this.grille[x1][y1].inonde();
-            this.grille[x2][y2].inonde();
-            this.grille[x3][y3].inonde();
-            tour += 1;
+        do {
+            x1 = random.nextInt(this.taille);
+            y1 = random.nextInt(this.taille);
+        } while (this.grille[x1][y1].etat() == Etat.Submergee);
+        do {
+            x2 = random.nextInt(this.taille);
+            y2 = random.nextInt(this.taille);
+        } while (this.grille[x2][y2].etat() == Etat.Submergee || (x2 == x1 && y2 == y1));
+        do {
+            x3 = random.nextInt(this.taille);
+            y3 = random.nextInt(this.taille);
+        } while (this.grille[x3][y3].etat() == Etat.Submergee || (x3 == x1 && y3 == y1) || (x3 == x2 && y3 == y2));
+        this.grille[x1][y1].inonde();
+        this.grille[x2][y2].inonde();
+        this.grille[x3][y3].inonde();
+        tour += 1;
     }
 
     public static void main (String[] args){

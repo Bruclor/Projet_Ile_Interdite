@@ -1,6 +1,5 @@
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Vector;
 
 public class Joueur {
 
@@ -80,13 +79,8 @@ public class Joueur {
     }
   }
 
-  public void getCle(Artefact artefact){
-    this.cles.put(artefact, this.cles.get(artefact)+1);
-  }
 
-  public void asseche(Zone zone){
-    zone.asseche();
-  }
+
 
   public void estElimine(){
     this.enJeu = false;
