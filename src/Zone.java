@@ -28,6 +28,10 @@ public class Zone extends Coord{
     public Etat etat(){return this.etat;}
     public Artefact artefact(){return this.artefact;}
 
+    public void setArtefact(Artefact artefact) {
+        this.artefact = artefact;
+    }
+
     public String toString(){
         String res = "";
         if (this.artefact == Artefact.Eau) res += "E";

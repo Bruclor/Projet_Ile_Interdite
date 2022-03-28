@@ -10,6 +10,7 @@ public class Joueur {
   
   /* Statut */
   private boolean enJeu;
+  private int action;
   
   /* Nombre de clés associées à chaque élément */
   Dictionary<Artefact, Integer> cles = new Hashtable<Artefact, Integer>(4);
@@ -51,6 +52,10 @@ public class Joueur {
   /* Statut */
   public void setNom(String nom){this.nom = nom;}
   public void setId(int id){this.id = id;}
+  public void retireCle(Artefact art){this.cles.put(art,this.cles.get(art)-1);}
+  public void ajouteCle(Artefact art){this.cles.put(art,this.cles.get(art)+1);}
+  public void retireArtefact(Artefact art){this.artefacts.put(art,this.artefacts.get(art)-1);}
+  public void ajouteArtefact(Artefact art){this.artefacts.put(art,this.artefacts.get(art)+1);}
 
   /* Deplacements */
   public void haut(){this.coord.set_y(this.coord.y()-1);}
@@ -77,7 +82,6 @@ public class Joueur {
   public void estElimine(){
     this.enJeu = false;
   }
-
 
 
 

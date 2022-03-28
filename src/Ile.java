@@ -82,8 +82,6 @@ public class Ile {
         JFrame Ile_Interdite = new ZoneWindow(ile);
         Ile_Interdite.setSize(800,800);
         Ile_Interdite.setVisible(true);
-
-
     }
 }
 
