@@ -5,6 +5,7 @@ public class Ile {
 
     private final int taille = 6;
     private Zone[][] grille = new Zone[this.taille][this.taille];
+    private Joueur[] joueurs;
     private int tour;
 
     /**
@@ -27,7 +28,14 @@ public class Ile {
         }
 
     }
-
+    /**
+    public InitJoueurs(int nb){
+        this.joueurs = new Joueur[nb];
+        for (int k=0; k<nb; k++){
+            this.joueurs[k] = new Joueur()
+        }
+    }
+    **/
     /**
      * Methodes
      */
@@ -67,14 +75,19 @@ public class Ile {
     }
 
     public static void main (String[] args){
+        Random random = new Random();
+        System.out.print(random);
+        System.out.println("coucou");
+        System.out.print(random.nextInt(6));
+        System.out.print(random.nextInt(6));
         System.out.println("coucou");
         Ile ile = new Ile();
         JFrame Ile_Interdite = new ZoneWindow(ile);
         Ile_Interdite.setSize(800,800);
         Ile_Interdite.setVisible(true);
+
+
     }
-
-
 }
 
 

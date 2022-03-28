@@ -1,25 +1,42 @@
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+
+
 public class Joueur {
   
   /* identifiant et nom du joueur */
   private int id;
   private String nom;
+  private Coord coord;
   
   /* Statut */
   private boolean enJeu;
-  private int x;   /* pour x et y faire une classe coord + extends ? */
-  private int y;
   
   /* Nombre de clés associées à chaque élément */
-  private int Cle_Feu;
-  private int Cle_Eau;
-  private int Cle_Terre;
-  private int Cle_Air;
+  Dictionary<Artefact, Integer> cles = new Hashtable<Artefact, Integer>(4);
   
   /* Artefact en possession */
-  private int Art_Feu;
-  private int Art_Eau;
-  private int Art_Terre;
-  private int Art_Air;
-  
+  Dictionary<Artefact, Integer> artefacts = new Hashtable<Artefact, Integer>(4);
+
+  public Joueur(int id, String nom, int x, int y){
+    this.coord.set_x(x);
+    this.coord.set_y(y);
+    this.id = id;
+    this.nom = nom;
+
+    this.cles.put(Artefact.Air, 0);
+    this.cles.put(Artefact.Feu, 0);
+    this.cles.put(Artefact.Eau, 0);
+    this.cles.put(Artefact.Terre, 0);
+
+    this.artefacts.put(Artefact.Air, 0);
+    this.artefacts.put(Artefact.Feu, 0);
+    this.artefacts.put(Artefact.Eau, 0);
+    this.artefacts.put(Artefact.Terre, 0);
+  }
+
+
+
 }
   

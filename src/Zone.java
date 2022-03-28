@@ -2,13 +2,11 @@ enum Artefact {Eau, Terre, Feu, Air, Heliport, Vide}
 
 enum Etat {Normale, Inondee, Submergee}
 
-public class Zone {
+public class Zone extends Coord{
 
     /** Attributs **/
     /*Une zone a des coordonnées x et y (abscisse et ordonnée)
     * et peut etre un heliport ou avoir un artéfact ou etre vide*/
-    private int x;
-    private int y;
     private Etat etat;
     private Artefact artefact;
 
@@ -18,15 +16,15 @@ public class Zone {
      * @param etat
      * @param vide**/
     public Zone(int x, int y, Etat etat, Artefact vide){
-        this.x = this.x;
-        this.y = this.y;
+        super(x, y);
         this.etat = etat;
         this.artefact = artefact;
     }
 
     /** Methodes **/
-    public int x(){return this.x;}
-    public int y(){return this.y;}
+    public int x(){return this.x();}
+    public int y(){return this.y();}
+    public Coord coord(){return this.coord();}
     public Etat etat(){return this.etat;}
     public Artefact artefact(){return this.artefact;}
 
