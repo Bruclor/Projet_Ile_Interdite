@@ -30,14 +30,17 @@ public class Ile {
 
     }
 
-    /**
+
     public InitJoueurs(int nb){
         this.joueurs = new Joueur[nb];
+        Random random = new Random();
+        Vector<Zone> dispo = this.getZonesDispo();
         for (int k=0; k<nb; k++){
-            this.joueurs[k] = new Joueur()
+            this.joueurs[k] = new Joueur(k, "J"+k,    )
         }
     }
-    **/
+
+
 
     /**
      * Methodes
@@ -61,11 +64,23 @@ public class Ile {
         }
     }
 
-    public void seche(Joueur j,Zone zone){
+    public void asseche(Joueur j,Zone zone){
         Vector<Coord> adjacents = this.adjacents(this.zone(j.x(), j.y()));
         if ((adjacents.contains(zone) || (j.x() == zone.x() && j.y() == zone.y())) && zone(zone.x(), zone.y()).etat()==Etat.Inondee){
             zone.asseche();
         }
+    }
+
+    public Vector<Zone> getZonesDispo(){
+        Vector<Zone> dispo = new Vector<Zone>();
+        for (int x=0; x<this.taille; x++){
+            for (int y=0; y<this.taille; y++){
+                if (this.zone(x,y).etat() != Etat.Submergee) {
+                    dispo.add(this.zone(x, y));
+                }
+            }
+        }
+        return dispo;
     }
 
     public void chercheCle(Joueur j){
@@ -78,40 +93,21 @@ public class Ile {
         if (r == 4 || r == 5) grille[j.x()][j.y()].inonde();
     }
 
-    //petit bug
-    public void finDeTour() {
+    public void finDeTour(){
+        Vector<Zone> dispo = this.getZonesDispo();
         Random random = new Random();
-        int x1;
-        int y1;
-        int x2;
-        int y2;
-        int x3;
-        int y3;
-
-        do {
-            x1 = random.nextInt(this.taille);
-            y1 = random.nextInt(this.taille);
-        } while (this.grille[x1][y1].etat() == Etat.Submergee);
-        do {
-            x2 = random.nextInt(this.taille);
-            y2 = random.nextInt(this.taille);
-        } while (this.grille[x2][y2].etat() == Etat.Submergee || (x2 == x1 && y2 == y1));
-        do {
-            x3 = random.nextInt(this.taille);
-            y3 = random.nextInt(this.taille);
-        } while (this.grille[x3][y3].etat() == Etat.Submergee || (x3 == x1 && y3 == y1) || (x3 == x2 && y3 == y2));
-        this.grille[x1][y1].inonde();
-        this.grille[x2][y2].inonde();
-        this.grille[x3][y3].inonde();
-        tour += 1;
+        int alea = -1;
+        int nb = 0;
+        while (dispo.size() > 0 && nb < 3) {
+            nb++;
+            alea = random.nextInt(dispo.size());
+            dispo.get(alea).inonde();
+            dispo.remove(alea);
+        }
     }
 
     public static void main (String[] args){
-        Random random = new Random();
-        System.out.print(random);
         System.out.println("coucou");
-        System.out.print(random.nextInt(6));
-        System.out.print(random.nextInt(6));
         System.out.println("coucou");
         Ile ile = new Ile();
         JFrame Ile_Interdite = new ZoneWindow(ile);
@@ -121,3 +117,15 @@ public class Ile {
 }
 
 
+
+
+
+
+/**
+ * Positions initiales des coordonnées joueurs aléatoires ?
+ * Nombre d'artefacts de chaque type sur l'ile ?
+ * Un meme joueur peut-il récuperer plusieurs artefacts ?
+ * L'héliport peut-il etre submergé ?
+ * Une meme zone peut-etre inondé deux fois de suite ?
+ * Actions du joueur.
+ */

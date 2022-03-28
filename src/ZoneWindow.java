@@ -33,8 +33,8 @@ public class ZoneWindow extends JFrame {
                         g.setColor(Color.BLUE);
                         for (int x=0; x<ile.taille(); x++){
                             for (int y=0; y< ile.taille(); y++) {
-                                if (ile.grille()[x][y].etat() == Etat.Normale)g.setColor(Color.ORANGE.brighter());
-                                else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.BLACK);
+                                if (ile.grille()[x][y].etat() == Etat.Normale)g.setColor(Color.ORANGE);
+                                else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.CYAN.darker());
                                 g.fillRect(105+x*100, 105+y*100, 90, 90);
                                 g.setColor(Color.BLUE);
                             }
@@ -55,8 +55,8 @@ public class ZoneWindow extends JFrame {
                 g.setColor(Color.BLUE);
                 for (int x=0; x<ile.taille(); x++){
                     for (int y=0; y< ile.taille(); y++) {
-                        if (ile.grille()[x][y].etat() == Etat.Normale)g.setColor(Color.ORANGE.brighter());
-                        else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.BLACK);
+                        if (ile.grille()[x][y].etat() == Etat.Normale)g.setColor(Color.ORANGE);
+                        else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.CYAN.darker());
                         g.fillRect(105+x*100, 105+y*100, 90, 90);
                         g.setColor(Color.BLUE);
                     }

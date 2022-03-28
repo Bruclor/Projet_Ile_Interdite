@@ -1,5 +1,6 @@
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Vector;
 
 public class Joueur {
 
@@ -19,11 +20,11 @@ public class Joueur {
   /* Nombre de clés associées à chaque élément */
   Dictionary<Artefact, Integer> cles = new Hashtable<Artefact, Integer>(4);
   
-  /* Artefact en possession */
+  /* nombre d'artefacts associés à chaque élément */
   Dictionary<Artefact, Integer> artefacts = new Hashtable<Artefact, Integer>(4);
 
-  /** METHODES
-   *  ========
+  /** CONSTRUCTEUR
+   *  ============
    */
 
   public Joueur(int id, String nom, int x, int y){
@@ -44,7 +45,10 @@ public class Joueur {
     this.artefacts.put(Artefact.Terre, 0);
   }
 
-  /* Getters */
+  /** GETTERS
+   *  =======
+   */
+
   public int id(){return this.id;}
   public String nom(){return this.nom;}
   public Coord coord(){return this.coord;}
@@ -55,7 +59,9 @@ public class Joueur {
   public int nbCles(Artefact artefact){return this.cles.get(artefact);}
   public boolean possedeArtefact(Artefact artefact){return this.artefacts.get(artefact) > 0;}
 
-  /* Setters */
+  /** SETTERS
+   *  =======
+   */
 
   /* Statut */
   public void setNom(String nom){this.nom = nom;}
@@ -80,8 +86,7 @@ public class Joueur {
   }
 
 
-
-
+  /* Evenements */
   public void estElimine(){
     this.enJeu = false;
   }
