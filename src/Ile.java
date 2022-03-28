@@ -45,7 +45,6 @@ public class Ile {
 
     //petit bug
     public void finDeTour() {
-        if (tour < 16) {
             Random random = new Random();
             int x1;
             int y1;
@@ -53,6 +52,7 @@ public class Ile {
             int y2;
             int x3;
             int y3;
+
             do {
                 x1 = random.nextInt(this.taille);
                 y1 = random.nextInt(this.taille);
@@ -64,14 +64,11 @@ public class Ile {
             do {
                 x3 = random.nextInt(this.taille);
                 y3 = random.nextInt(this.taille);
-            } while (this.grille[x3][y3].etat() == Etat.Submergee || (tour < 15 && (x3 == x1 && y3 == y1) || (x3 == x2 && y3 == y2))
-                     || (tour == 15 && (x3 == x1 && y3 == y1 && this.grille[x1][y1].etat() == Etat.Submergee))
-                     || (tour == 15 && (x3 == x2 && y3 == y2 && this.grille[x2][y2].etat() == Etat.Submergee)));
+            } while (this.grille[x3][y3].etat() == Etat.Submergee || (x3 == x1 && y3 == y1) || (x3 == x2 && y3 == y2));
             this.grille[x1][y1].inonde();
             this.grille[x2][y2].inonde();
             this.grille[x3][y3].inonde();
             tour += 1;
-        }
     }
 
     public static void main (String[] args){

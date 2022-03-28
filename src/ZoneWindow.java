@@ -19,12 +19,13 @@ public class ZoneWindow extends JFrame {
 
         //ImageIcon img = new ImageIcon("tips.gif");
         JButton bouton = new JButton("Fin de tour");
+
+
         bouton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
                 ile.finDeTour();
-                System.out.println("ok");
                 JPanel panneau = new JPanel() {
                     @Override
                     public void paintComponent(Graphics g) {
@@ -33,7 +34,7 @@ public class ZoneWindow extends JFrame {
                         for (int x=0; x<ile.taille(); x++){
                             for (int y=0; y< ile.taille(); y++) {
                                 if (ile.grille()[x][y].etat() == Etat.Normale)g.setColor(Color.ORANGE.brighter());
-                                else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.BLUE.brighter());
+                                else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.BLACK);
                                 g.fillRect(105+x*100, 105+y*100, 90, 90);
                                 g.setColor(Color.BLUE);
                             }
@@ -55,7 +56,7 @@ public class ZoneWindow extends JFrame {
                 for (int x=0; x<ile.taille(); x++){
                     for (int y=0; y< ile.taille(); y++) {
                         if (ile.grille()[x][y].etat() == Etat.Normale)g.setColor(Color.ORANGE.brighter());
-                        else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.BLUE.brighter());
+                        else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.BLACK);
                         g.fillRect(105+x*100, 105+y*100, 90, 90);
                         g.setColor(Color.BLUE);
                     }

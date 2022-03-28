@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Vector;
 
 public class Coord {
 
@@ -20,5 +21,16 @@ public class Coord {
 
     public void set_x(int x){this.x = x;}
     public void set_y(int y){this.y = y;}
+
+    public Coord[] adjacents(int sup){
+        Vector<Coord> adj = new Vector<Coord>();
+        if (this.x==0){
+
+        }
+
+        if (this.x == 0){
+           adj.add()
+        }
+    }
     
 }
