@@ -114,6 +114,10 @@ public class Ile {
         return dispo;
     }
 
+    public Joueur[] getJoueurs() {
+        return joueurs;
+    }
+
     public void chercheCle(Joueur j){
         Random random = new Random();
         int r = random.nextInt(8);
@@ -137,11 +141,9 @@ public class Ile {
         }
     }
 
-    public void main (String[] args){
+    public static void main (String[] args){
         Ile ile = new Ile();
-        ile.InitJoueurs(2);
-        this.joueurs[0].setNom("Alexandre");
-        this.joueurs[0].setNom("Lorenzo");
+        //ile.InitJoueurs(2);
         ile.InitArtefacts();
         JFrame Ile_Interdite = new ZoneWindow(ile);
         Ile_Interdite.setSize(800,800);
