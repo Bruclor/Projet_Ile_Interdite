@@ -27,9 +27,9 @@ public class Joueur {
    *  ============
    */
 
-  public Joueur(int id, String nom, int x, int y){
-    this.coord.set_x(x);
-    this.coord.set_y(y);
+  public Joueur(int id, String nom, Coord coord){
+    this.coord.set_x(coord.x());
+    this.coord.set_y(coord.y());
     this.enJeu = true;
     this.id = id;
     this.nom = nom;

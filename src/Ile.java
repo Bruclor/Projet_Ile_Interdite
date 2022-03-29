@@ -31,15 +31,46 @@ public class Ile {
     }
 
 
-    public InitJoueurs(int nb){
+    public void InitJoueurs(int nb){
         this.joueurs = new Joueur[nb];
         Random random = new Random();
         Vector<Zone> dispo = this.getZonesDispo();
+        int alea;
         for (int k=0; k<nb; k++){
-            this.joueurs[k] = new Joueur(k, "J"+k,    )
+            alea = random.nextInt(dispo.size());
+            this.joueurs[k] = new Joueur(k, "J"+k, dispo.get(alea).coord());
+            dispo.remove(alea);
         }
     }
 
+    public void InitArtefacts(){
+        Random random = new Random();
+        Vector<Zone> dispo = this.getZonesDispo();
+        int alea;
+        alea = random.nextInt(dispo.size());
+        dispo.get(alea).setArtefact(Artefact.Heliport);
+        for (int k=0; k<2; k++) {
+            alea = random.nextInt(dispo.size());
+            dispo.get(alea).setArtefact(Artefact.Air);
+            dispo.remove(alea);
+        }
+        for (int k=0; k<2; k++) {
+            alea = random.nextInt(dispo.size());
+            dispo.get(alea).setArtefact(Artefact.Feu);
+            dispo.remove(alea);
+        }
+        for (int k=0; k<2; k++) {
+            alea = random.nextInt(dispo.size());
+            dispo.get(alea).setArtefact(Artefact.Terre);
+            dispo.remove(alea);
+        }
+        for (int k=0; k<2; k++) {
+            alea = random.nextInt(dispo.size());
+            dispo.get(alea).setArtefact(Artefact.Eau);
+            dispo.remove(alea);
+        }
+
+    }
 
 
     /**
@@ -106,10 +137,12 @@ public class Ile {
         }
     }
 
-    public static void main (String[] args){
-        System.out.println("coucou");
-        System.out.println("coucou");
+    public void main (String[] args){
         Ile ile = new Ile();
+        ile.InitJoueurs(2);
+        this.joueurs[0].setNom("Alexandre");
+        this.joueurs[0].setNom("Lorenzo");
+        ile.InitArtefacts();
         JFrame Ile_Interdite = new ZoneWindow(ile);
         Ile_Interdite.setSize(800,800);
         Ile_Interdite.setVisible(true);
