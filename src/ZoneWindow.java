@@ -76,12 +76,12 @@ public class ZoneWindow extends JFrame {
                         else if (ile.grille()[x][y].artefact() == Artefact.Terre) g.setColor(Color.orange.darker());
                         g.fillPolygon(new int[]{105 + x * 100, 105 + x * 100 + 45, 105 + x * 100 + 90},
                                       new int[]{105 + y * 100 + 90, 105 + y * 100 + 45, 105 + y * 100 + 90}, 3);
-                        g.setColor(Color.WHITE);
+                        /*g.setColor(Color.WHITE);
                         for (int j = 0; j < ile.getJoueurs().length; j++){
-                            /*if (ile.getJoueurs()[j].x() == x && ile.getJoueurs()[j].y() == y) {
+                              if (ile.getJoueurs()[j].x() == x && ile.getJoueurs()[j].y() == y) {
                                     g.drawString(ile.getJoueurs()[j].nom(),105 + x * 100,105 + x * 100+j*20);
-                               }*/
-                        }
+                               }
+                        }*/
                         g.setColor(Color.BLUE);
                     }
                 }

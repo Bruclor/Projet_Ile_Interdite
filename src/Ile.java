@@ -31,15 +31,24 @@ public class Ile {
     }
 
 
-    public void InitJoueurs(int nb){
+    public void InitJoueurs(int nb, String[] noms){
         this.joueurs = new Joueur[nb];
         Random random = new Random();
         Vector<Zone> dispo = this.getZonesDispo();
         int alea;
-        for (int k=0; k<nb; k++){
-            alea = random.nextInt(dispo.size());
-            this.joueurs[k] = new Joueur(k, "J"+k, dispo.get(alea).coord());
-            dispo.remove(alea);
+        if (nb == noms.length) {
+            for (int k = 0; k < nb; k++) {
+                alea = random.nextInt(dispo.size());
+                this.joueurs[k] = new Joueur(k, noms[k], dispo.get(alea).coord());
+                dispo.remove(alea);
+            }
+        }
+        else {
+            for (int k = 0; k < nb; k++) {
+                alea = random.nextInt(dispo.size());
+                this.joueurs[k] = new Joueur(k, "J" + k, dispo.get(alea).coord());
+                dispo.remove(alea);
+            }
         }
     }
 
@@ -143,7 +152,12 @@ public class Ile {
 
     public static void main (String[] args){
         Ile ile = new Ile();
-        //ile.InitJoueurs(2);
+
+        String[] noms = new String[2];
+        noms[0] = "Lorenzo";
+        noms[1] = "Alexandre";
+
+        /*ile.InitJoueurs(2, noms);*/
         ile.InitArtefacts();
         JFrame Ile_Interdite = new ZoneWindow(ile);
         Ile_Interdite.setSize(800,800);
