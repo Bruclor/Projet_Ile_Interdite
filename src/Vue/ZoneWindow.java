@@ -1,14 +1,18 @@
+package Vue;
+
+import Modeles.*;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
+import java.awt.event.*;
 
 // j'ai pris ca sur internet
 public class ZoneWindow extends JFrame {
 
     public ZoneWindow(Ile ile) {
 
-        super("Ile Interdite");
+        super("Modeles.Ile Interdite");
 
+        /** Action de fermeture fenetre **/
         WindowListener l = new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
@@ -18,7 +22,18 @@ public class ZoneWindow extends JFrame {
         addWindowListener(l);
 
         //ImageIcon img = new ImageIcon("tips.gif");
+        /** Ajout du bouton "Fin de tour" **/
         JButton bouton = new JButton("Fin de tour");
+
+        /** Ajout des boutons de déplacement **/
+        Icon haut = new ImageIcon("src/Images/haut.jpg");
+        Icon bas = new ImageIcon("src/Images/bas.jpg");
+        Icon droite = new ImageIcon("src/Images/droite.jpg");
+        Icon gauche = new ImageIcon("src/Images/gauche.jpg");
+        JButton btHaut = new JButton(haut);
+        JButton btBas = new JButton(bas);
+        JButton btDroite = new JButton(droite);
+        JButton btGauche = new JButton(gauche);
 
 
         bouton.addActionListener(new ActionListener()
@@ -29,6 +44,7 @@ public class ZoneWindow extends JFrame {
                 JPanel panneau = new JPanel() {
                     @Override
                     public void paintComponent(Graphics g) {
+
                         super.paintComponent(g);
                         g.setColor(Color.BLUE);
                         for (int x=0; x<ile.taille(); x++){
@@ -88,9 +104,11 @@ public class ZoneWindow extends JFrame {
             }
         };
 
+        panneau.setLocation(1250, 350);
         panneau.add(bouton);
         setContentPane(panneau);
         setSize(200, 100);
         setVisible(true);
+
     }
 }

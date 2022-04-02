@@ -1,3 +1,5 @@
+package Modeles;
+
 import java.util.Random;
 
 public class Coord {

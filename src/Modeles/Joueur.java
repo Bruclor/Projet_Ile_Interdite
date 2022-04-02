@@ -1,6 +1,10 @@
+package Modeles;
+
+import Modeles.Artefact;
+import Modeles.Coord;
+
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Vector;
 
 public class Joueur {
 
@@ -28,8 +32,7 @@ public class Joueur {
    */
 
   public Joueur(int id, String nom, Coord coord){
-    this.coord.set_x(coord.x());
-    this.coord.set_y(coord.y());
+    this.coord = coord;
     this.enJeu = true;
     this.id = id;
     this.nom = nom;
