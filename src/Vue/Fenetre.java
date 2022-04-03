@@ -5,8 +5,9 @@ import Modeles.Zone;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+//import java.awt.event.ActionEvent;
+//import java.awt.event.ActionListener;
 
 public class Fenetre extends JFrame implements ActionListener{
 
@@ -34,6 +35,7 @@ public class Fenetre extends JFrame implements ActionListener{
     private JPanel settings = new JPanel();
     private JPanel numbers = new JPanel();
     private JPanel game = new JPanel();
+    private JPanel souris = new JPanel();
 
     //Constructeur de la fenetre
     public Fenetre(){
@@ -187,6 +189,16 @@ public class Fenetre extends JFrame implements ActionListener{
     //Fonction main
     public static void main(String[] args){
         Fenetre fenetre = new Fenetre();
+
+        /*while (true) {
+            for (int i = 0; i < fenetre.ile.getJoueurs().length; i++) {
+                fenetre.ile.getJoueurs().play();
+
+                if (isGameOver()) {
+                    initGame();
+                }
+            }
+        }*/
     }
 }
 

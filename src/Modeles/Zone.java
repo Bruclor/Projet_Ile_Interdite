@@ -6,22 +6,33 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
 
+/**
+ * Une zone dans une grille avec des coordonnées
+ * La zone peut etre normale, inondée ou submergée
+ * La zone peut avoir un artéfact, un heliport ou rien
+ **/
 public class Zone extends JPanel implements MouseListener{
 
-    /** Attributs **/
-    /*Une zone a des coordonnées x et y (abscisse et ordonnée)
-    * et peut etre un heliport ou avoir un artéfact ou etre vide*/
+    /*******************/
+    /**   Attributs   **/
+    /*******************/
 
     private Coord coord;
     private Etat etat;
     private Artefact artefact;
     private Vector<Integer> idJoueurs;
 
+    /*******************/
+    /** Constructeur  **/
+    /*******************/
+
     /** Constructeurs
-     * @param x
-     * @param y
-     * @param etat
-     * @param artefact **/
+     *
+     * @param x Coordonnée x
+     * @param y Coordonnée y
+     * @param etat Etat Normal, Inondee ou Submergee
+     * @param artefact Artefact (Air, Terre, Feu, Eau), Heliport ou Vide
+     **/
     public Zone(int x, int y, Etat etat, Artefact artefact){
         this.etat = etat;
         this.artefact = artefact;
@@ -30,17 +41,64 @@ public class Zone extends JPanel implements MouseListener{
         addMouseListener(this);
     }
 
-    /** Methodes **/
+    /*******************/
+    /**    Getter     **/
+    /*******************/
+
+    /**
+     * Getter x
+     *
+     * @return Coordonnée x
+     **/
     public int x(){return this.coord.x();}
+
+    /**
+     * Getter y
+     *
+     * @return Coordonnée y
+     **/
     public int y(){return this.coord.y();}
+
+    /**
+     * Getter coord
+     *
+     * @return Coordonnée
+     **/
     public Coord coord(){return this.coord;}
+
+    /**
+     * Getter etat
+     *
+     * @return Etat
+     **/
     public Etat etat(){return this.etat;}
+
+    /**
+     * Getter artefact
+     *
+     * @return Coordonnée x
+     **/
     public Artefact artefact(){return this.artefact;}
 
+    /*******************/
+    /**    Méthode    **/
+    /*******************/
+
+    /**
+     * Setter Artefact
+     *
+     *
+     * @param artefact artefact
+     **/
     public void setArtefact(Artefact artefact) {
         this.artefact = artefact;
     }
 
+    /**
+     * Affiche une zone en chaine de caractere
+     *
+     * @return chaine de carctere
+     **/
     public String toString(){
         String res = "";
         if (this.artefact == Artefact.Eau) res += "E";
@@ -55,15 +113,26 @@ public class Zone extends JPanel implements MouseListener{
         return res;
     }
 
+    /**
+     * Inonde la zone
+     **/
     public void inonde(){
         if (this.etat == Etat.Normale) this.etat = Etat.Inondee;
         else if (this.etat == Etat.Inondee) this.etat = Etat.Submergee;
     }
 
+    /**
+     * asseche la zone
+     **/
     public void asseche(){
         if (this.etat == Etat.Inondee) this.etat = Etat.Normale;
     }
 
+    /**
+     * Dessine la zone avec les artefacts et les joueurs dedans
+     *
+     * @param g le graphique où dessiner
+     **/
     public void paintComponent(Graphics g){
         g.setColor(Color.BLUE.darker());
         g.fillRect(0, 0, 99,99);
@@ -93,6 +162,11 @@ public class Zone extends JPanel implements MouseListener{
         }
     }
 
+    /**
+     * affiche les coordonnées de la zone si on clique dessus
+     *
+     * @param e evenement
+     **/
     public void mouseClicked(MouseEvent e) {
         System.out.print(this.x());
         System.out.println(this.y());
@@ -103,10 +177,20 @@ public class Zone extends JPanel implements MouseListener{
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
 
+    /**
+     * ajoute un joueur dans la zone
+     *
+     * @param k id du joueur
+     **/
     public void addJoueur(int k) {
         this.idJoueurs.add(k);
     }
 
+    /**
+     * retire un joueur dans la zone
+     *
+     * @param k id du joueur
+     **/
     public void removeJoueur(int k) {
         this.idJoueurs.remove(k);
     }

@@ -50,7 +50,7 @@ public class ZoneWindow extends JFrame {
                         for (int x=0; x<ile.taille(); x++){
                             for (int y=0; y< ile.taille(); y++) {
                                 if (ile.grille()[x][y].etat() == Etat.Normale)g.setColor(Color.ORANGE);
-                                else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.CYAN.darker());
+                                else if (ile.grille()[x][y].etat() == Etat.Inondee)g.setColor(Color.CYAN);
                                 g.fillRect(105+x*100, 105+y*100, 90, 90);
                                 if (ile.grille()[x][y].artefact() == Artefact.Air)g.setColor(Color.GRAY);
                                 else if (ile.grille()[x][y].artefact() == Artefact.Eau)g.setColor(new Color(0,150,200));
@@ -84,7 +84,7 @@ public class ZoneWindow extends JFrame {
                 for (int x=0; x<ile.taille(); x++) {
                     for (int y = 0; y < ile.taille(); y++) {
                         if (ile.grille()[x][y].etat() == Etat.Normale) g.setColor(Color.ORANGE);
-                        else if (ile.grille()[x][y].etat() == Etat.Inondee) g.setColor(Color.CYAN.darker());
+                        else if (ile.grille()[x][y].etat() == Etat.Inondee) g.setColor(Color.CYAN);
                         g.fillRect(105 + x * 100, 105 + y * 100, 90, 90);
                         if (ile.grille()[x][y].artefact() == Artefact.Air) g.setColor(Color.GRAY);
                         else if (ile.grille()[x][y].artefact() == Artefact.Eau) g.setColor(new Color(0, 150, 200));
