@@ -136,7 +136,7 @@ public class Zone extends JPanel implements MouseListener{
     public void paintComponent(Graphics g){
         g.setColor(Color.BLUE.darker());
         g.fillRect(0, 0, 99,99);
-        if (this.etat==Etat.Inondee){g.setColor(Color.BLUE); g.fillRect(0, 0, 99,99);}
+        if (this.etat==Etat.Inondee){g.setColor(new Color (100, 120, 240)); g.fillRect(0, 0, 99,99);}
         else if(this.etat==Etat.Normale){g.setColor(Color.ORANGE.darker()); g.fillRect(0, 0, 99,99);}
         if (this.artefact!=Artefact.Vide) {
             g.setColor(Color.WHITE);

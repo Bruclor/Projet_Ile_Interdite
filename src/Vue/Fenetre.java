@@ -1,21 +1,25 @@
 package Vue;
 
-import Modeles.Ile;
-import Modeles.Zone;
-
+import Controleur.*;
+import Modeles.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Fenetre extends JFrame implements ActionListener{
+public class Fenetre extends JFrame implements Evenements {
+
+
+    /**====================================
+     *          ATTRIBUTS
+     * ====================================
+     */
 
     //Les modeles
-    private Ile ile;
-    private int nbJoueurs = 1;
-    private int nbArtefacts = 1;
-    private boolean changeNbJoueurs = true;
+    private Ile ile;                          //Ile du jeu
+    private int nbJoueurs = 1;                //nombre de joueurs
+    private int nbArtefacts = 1;              //nombre d'artefacts
+    private boolean changeNbJoueurs = true;   //true si mode "changer nb joueur" false sinon
 
     //Les boutons de la fenetre
     private JButton NouvellePartie = new JButton("Nouvelle Partie");
@@ -30,7 +34,10 @@ public class Fenetre extends JFrame implements ActionListener{
     private JButton Arret = new JButton("Arreter la partie");
     private JButton FinDeTour = new JButton("Fin de tour");
 
-    //Les paneaux de la fenetre
+    /**====================================
+     *          CONSTRUCTEUR
+     * ====================================
+     */
     private JPanel menu = new JPanel();
     private JPanel settings = new JPanel();
     private JPanel numbers = new JPanel();
@@ -49,9 +56,18 @@ public class Fenetre extends JFrame implements ActionListener{
         this.setVisible(true);                                           //Affichage
     }
 
-    //Construction initiale des panels
+    /**====================================
+     *              METHODES
+     * ====================================
+     */
+
+    /**
+     * void : initialisation des panels et des buttons
+     *
+     **/
     public void initPanelAndButton(){
 
+        //initialisation du menu
         JPanel menu = new JPanel();
         menu.setBackground(Color.BLUE.darker().darker());
         menu.setLayout(new FlowLayout());
@@ -115,45 +131,43 @@ public class Fenetre extends JFrame implements ActionListener{
         Arret.setPreferredSize(new Dimension(160, 20));
     }
 
+    /**
+     * @void initGame : Initialisation du jeu (au lancement d'une nouvelle partie)
+     *
+     */
+
     public void initGame(){
         JPanel jeu = new JPanel();
         jeu.setLayout(new BorderLayout());
-
         this.ile = new Ile(6);
-
         String[] noms = new String[nbJoueurs];
         for (int k=0; k<nbJoueurs; k++){
             noms[k] = "J"+k;
         }
-
         this.ile.InitJoueurs(nbJoueurs, noms);
         this.ile.InitArtefacts(nbArtefacts);
         this.ile.setBackground(Color.BLUE.darker().darker());
-
         for (int x=0; x<ile.taille(); x++){
             for (int y=0; y<ile.taille(); y++){
                 Zone k = ile.zone(x, y);
                 ile.add(k);
             }
         }
-
         ile.setPreferredSize(new Dimension(600, 600));
         jeu.add(ile, BorderLayout.WEST);
-
         JPanel commandes = new JPanel();
         commandes.setBackground(Color.BLUE);
         commandes.setLayout(new FlowLayout());
-
-
         commandes.add(Arret);
-
-
         commandes.add(FinDeTour);
-
         jeu.add(commandes);
         this.game = jeu;
     }
 
+    /**
+     * @void upload game : mise à jour du jeu (après un évènement sur le jeu)
+     *
+     **/
     public void uploadGame(){
         JPanel upload = new JPanel();
         upload.setLayout(new BorderLayout());
@@ -169,7 +183,11 @@ public class Fenetre extends JFrame implements ActionListener{
 
 
 
-    //Gestion des évènements
+    /**
+     * @void actionPerformed : gestion des evenements
+     * @param ActionEvent e : un evenement
+     *
+     **/
     @Override
     public void actionPerformed(ActionEvent e){
         if (e.getSource()==Parametres) {this.setContentPane(this.settings);}
@@ -186,7 +204,11 @@ public class Fenetre extends JFrame implements ActionListener{
         this.setVisible(true);
     }
 
-    //Fonction main
+    /**
+     * @void main : fonction principale
+     * @param String args[]
+     *
+     **/
     public static void main(String[] args){
         Fenetre fenetre = new Fenetre();
 

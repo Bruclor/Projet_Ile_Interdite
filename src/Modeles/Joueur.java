@@ -1,8 +1,6 @@
 package Modeles;
 
-import Modeles.Artefact;
-import Modeles.Coord;
-
+import Controleur.*;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -10,7 +8,7 @@ import java.util.Hashtable;
  * Une joueur avec un id, un nom et des coordonnées
  * Un joueur peut etre en
  **/
-public class Joueur {
+public class Joueur extends Action{
 
   /*******************/
   /**   Attributs   **/
