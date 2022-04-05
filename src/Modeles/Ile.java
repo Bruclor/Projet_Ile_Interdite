@@ -7,13 +7,23 @@ import java.util.Vector;
 
 public class Ile extends Grille {
 
+    /*******************/
+    /**   Attributs   **/
+    /*******************/
+
     private int taille;
     private Zone[][] grille;
     private Joueur[] joueurs;
     private int tour;
 
+    /*******************/
+    /** Constructeur  **/
+    /*******************/
+
     /**
-     * Constructeurs
+     * Constructeur
+     *
+     * @param taille taille de l'ile
      **/
     public Ile(int taille) {
         super(taille, taille);
@@ -44,7 +54,12 @@ public class Ile extends Grille {
         this.tour = 0;
     }
 
-
+    /**
+     * Initialise les joueurs de l'ile
+     *
+     * @param nb nombre de joueurs
+     * @param noms liste de nom des joueurs
+     **/
     public void InitJoueurs(int nb, String[] noms) {
         this.joueurs = new Joueur[nb];
         Random random = new Random();
@@ -68,6 +83,11 @@ public class Ile extends Grille {
         }
     }
 
+    /**
+     * Initialise les artefacts de l'ile
+     *
+     * @param nbArtefacts nombre d'artefact pour chaque type
+     **/
     public void InitArtefacts(int nbArtefacts) {
         Random random = new Random();
         Vector<Zone> dispo = this.getZonesDispo();
@@ -98,18 +118,60 @@ public class Ile extends Grille {
 
     }
 
-    public Zone zone(int x, int y) {
-        return grille[x][y];
-    }
+    /*******************/
+    /**    Getter     **/
+    /*******************/
 
+    /**
+     * Getter grille
+     *
+     * @return la grille de l'ile
+     **/
     public Zone[][] grille() {
         return this.grille;
     }
 
+    /**
+     * Getter taille
+     *
+     * @return la taille de l'ile
+     **/
     public int taille() {
         return this.taille;
     }
 
+    /**
+     * Getter grille
+     *
+     * @return tableau des joueurs
+     **/
+    public Joueur[] getJoueurs() {
+        return joueurs;
+    }
+
+    /*******************/
+    /**    Méthode    **/
+    /*******************/
+
+    /**
+     *  renvoie la zone de coord x y dans la grille
+     *
+     * @param x abscisse
+     * @param y ordonnée
+     *
+     * @return zone de coord x y
+     **/
+    public Zone zone(int x, int y) {
+        return grille[x][y];
+    }
+
+    /**
+     * renvoie le vecteur des zones autour d'une zone
+     *
+     * @param zone la zone dont on veut connaitre les voisins
+     *
+     * @return vecteur des zones autour de la zone
+     **/
     public Vector<Coord> adjacents(Zone zone) {
         Vector<Coord> adj = new Vector<Coord>();
         if (zone.x() < this.taille - 1) {
@@ -127,6 +189,12 @@ public class Ile extends Grille {
         return adj;
     }
 
+    /**
+     * Un joueur se déplace vers une zone
+     *
+     * @param j identifiant du joueur
+     * @param dest destination
+     **/
     public void deplace(Joueur j, Zone dest) {
         Vector<Coord> adjacents = this.adjacents(this.zone(j.x(), j.y()));
         if (adjacents.contains(dest) && dest.etat() != Etat.Submergee) {
@@ -134,6 +202,12 @@ public class Ile extends Grille {
         }
     }
 
+    /**
+     * Un joueur asseche un zone
+     *
+     * @param j identifiant du joueur
+     * @param zone zone a assecher
+     **/
     public void asseche(Joueur j, Zone zone) {
         Vector<Coord> adjacents = this.adjacents(this.zone(j.x(), j.y()));
         if ((adjacents.contains(zone) || (j.x() == zone.x() && j.y() == zone.y())) && zone.etat() == Etat.Inondee) {
@@ -141,6 +215,26 @@ public class Ile extends Grille {
         }
     }
 
+    /**
+     * Un joueur cherche une clé
+     *
+     * @param j identifiant du joueur
+     **/
+    public void chercheCle(Joueur j) {
+        Random random = new Random();
+        int r = random.nextInt(6);
+        if (r == 0) j.ajouteCle(Artefact.Air);
+        if (r == 1) j.ajouteCle(Artefact.Eau);
+        if (r == 2) j.ajouteCle(Artefact.Feu);
+        if (r == 3) j.ajouteCle(Artefact.Terre);
+        if (r == 4 || r == 5) grille[j.x()][j.y()].inonde();
+    }
+
+    /**
+     * revoie un vecteur des zones disponibles
+     *
+     * @return vecteurs des zones dispos
+     **/
     public Vector<Zone> getZonesDispo() {
         Vector<Zone> dispo = new Vector<Zone>();
         for (int x = 0; x < this.taille; x++) {
@@ -153,20 +247,9 @@ public class Ile extends Grille {
         return dispo;
     }
 
-    public Joueur[] getJoueurs() {
-        return joueurs;
-    }
-
-    public void chercheCle(Joueur j) {
-        Random random = new Random();
-        int r = random.nextInt(6);
-        if (r == 0) j.ajouteCle(Artefact.Air);
-        if (r == 1) j.ajouteCle(Artefact.Eau);
-        if (r == 2) j.ajouteCle(Artefact.Feu);
-        if (r == 3) j.ajouteCle(Artefact.Terre);
-        if (r == 4 || r == 5) grille[j.x()][j.y()].inonde();
-    }
-
+    /**
+     * inonde trois cases differentes
+     **/
     public void finDeTour() {
         Vector<Zone> dispo = this.getZonesDispo();
         Random random = new Random();

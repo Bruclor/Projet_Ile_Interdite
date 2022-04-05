@@ -33,7 +33,7 @@ public class Joueur extends Action{
   /** Constructeur  **/
   /*******************/
 
-  /** Constructeurs
+  /** Constructeur
    *
    * @param id identifiant
    * @param nom nom
