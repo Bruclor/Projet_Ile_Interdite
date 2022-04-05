@@ -6,7 +6,7 @@ import java.util.Hashtable;
 
 /**
  * Une joueur avec un id, un nom et des coordonnées
- * Un joueur peut etre en
+ * Un joueur peut etre en vie ou non
  **/
 public class Joueur extends Action{
 

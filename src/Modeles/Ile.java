@@ -5,6 +5,10 @@ import Vue.*;
 import java.util.Random;
 import java.util.Vector;
 
+/**
+ * Une ile avec une grille d'une certaine taille
+ * Une ile posssede un ou plusieurs joueurs
+ **/
 public class Ile extends Grille {
 
     /*******************/
