@@ -1,6 +1,7 @@
 package Modeles;
 
 import Vue.*;
+import Controleurs.*;
 
 import java.util.Random;
 import java.util.Vector;
@@ -9,6 +10,8 @@ import java.util.Vector;
  * Une ile avec une grille d'une certaine taille
  * Une ile posssede un ou plusieurs joueurs
  **/
+import static Controleurs.ChangeParametre.*;
+
 public class Ile extends Grille {
 
     /*******************/
@@ -18,7 +21,10 @@ public class Ile extends Grille {
     private int taille;
     private Zone[][] grille;
     private Joueur[] joueurs;
+    private int nbArtefacts;
+    private int nbJoueurs;
     private int tour;
+    private ChangeParametre param = ChangeParametre.Joueurs;
 
     /*******************/
     /** Constructeur  **/
@@ -28,9 +34,13 @@ public class Ile extends Grille {
      * Constructeur
      *
      * @param taille taille de l'ile
+     * @param nbJoueurs nombre de joueurs
+     * @param nbArtefacts nombre d'artefacts de chaque type
      **/
-    public Ile(int taille) {
+    public Ile(int taille, int nbJoueurs, int nbArtefacts) {
         super(taille, taille);
+        this.nbJoueurs = nbJoueurs;
+        this.nbArtefacts = nbArtefacts;
         this.taille = taille;
         this.grille = new Zone[this.taille][this.taille];
         for (int x = 0; x < this.taille; x++) {
@@ -61,38 +71,28 @@ public class Ile extends Grille {
     /**
      * Initialise les joueurs de l'ile
      *
-     * @param nb nombre de joueurs
-     * @param noms liste de nom des joueurs
      **/
-    public void InitJoueurs(int nb, String[] noms) {
-        this.joueurs = new Joueur[nb];
+    public void InitJoueurs() {
+        System.out.println(this.nbJoueurs);
+        this.joueurs = new Joueur[nbJoueurs];
         Random random = new Random();
         Vector<Zone> dispo = this.getZonesDispo();
         int alea;
-        if (nb == noms.length) {
-            for (int k = 0; k < nb; k++) {
-                alea = random.nextInt(dispo.size());
-                Coord posalea = dispo.get(alea).coord();
-                this.grille[posalea.x()][posalea.y()].addJoueur(k);
-                this.joueurs[k] = new Joueur(k, noms[k], posalea);
-                dispo.get(alea).addJoueur(k);
-                dispo.remove(alea);
-            }
-        } else {
-            for (int k = 0; k < nb; k++) {
-                alea = random.nextInt(dispo.size());
-                this.joueurs[k] = new Joueur(k, "J" + k, dispo.get(alea).coord());
-                dispo.remove(alea);
-            }
+        for (int k = 0; k < nbJoueurs; k++) {
+            alea = random.nextInt(dispo.size());
+            this.joueurs[k] = new Joueur(k, "J" + k, dispo.get(alea).coord());
+            dispo.get(alea).addJoueur(k);
+            System.out.println(dispo.get(alea).getIdJoueurs());
+            dispo.remove(alea);
         }
     }
+
 
     /**
      * Initialise les artefacts de l'ile
      *
-     * @param nbArtefacts nombre d'artefact pour chaque type
      **/
-    public void InitArtefacts(int nbArtefacts) {
+    public void InitArtefacts() {
         Random random = new Random();
         Vector<Zone> dispo = this.getZonesDispo();
         int alea;
@@ -122,6 +122,15 @@ public class Ile extends Grille {
 
     }
 
+    public void InitZoneIG(){
+        for (int x=0; x<this.taille; x++){
+            for (int y=0; y<this.taille; y++){
+                this.add(this.zone(x, y));
+            }
+        }
+
+    }
+
     /*******************/
     /**    Getter     **/
     /*******************/
@@ -143,6 +152,15 @@ public class Ile extends Grille {
     public int taille() {
         return this.taille;
     }
+
+    public int getNbArtefacts(){return this.nbArtefacts;}
+    public void setNbArtefacts(int n) {
+        if (n > 0 && n < 5) {
+            nbArtefacts = n;
+        }
+    }
+
+    public int getNbJoueurs(){return this.nbJoueurs;}
 
     /**
      * Getter grille
@@ -252,7 +270,7 @@ public class Ile extends Grille {
     }
 
     /**
-     * inonde trois cases differentes
+     * Inonde trois cases differentes et termine le tour
      **/
     public void finDeTour() {
         Vector<Zone> dispo = this.getZonesDispo();
@@ -264,6 +282,32 @@ public class Ile extends Grille {
             alea = random.nextInt(dispo.size());
             dispo.get(alea).inonde();
             dispo.remove(alea);
+        }
+    }
+
+    /**
+     * Indique le type de parametrage effectué
+     *
+     * @param p le type de parametrage
+     */
+    public void parametrage(ChangeParametre p){this.param = p;}
+
+    /**
+     * Modifie la valeur du parametre concerné
+     *
+     * @param n entier
+     */
+    public void operateParam(int n){
+
+        switch (this.param){
+
+            case Joueurs :
+                this.nbJoueurs = n;
+                break;
+
+            case Artefacts :
+                this.nbArtefacts = n;
+                break;
         }
     }
 }

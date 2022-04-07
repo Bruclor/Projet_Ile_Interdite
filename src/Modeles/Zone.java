@@ -37,7 +37,7 @@ public class Zone extends JPanel implements MouseListener{
         this.etat = etat;
         this.artefact = artefact;
         this.coord = new Coord(x, y);
-        this.idJoueurs = new Vector<Integer>(0);
+        this.idJoueurs = new Vector<Integer>();
         addMouseListener(this);
     }
 
@@ -76,23 +76,10 @@ public class Zone extends JPanel implements MouseListener{
     /**
      * Getter artefact
      *
-     * @return Coordonnée x
+     * @return Artefact de la zone
      **/
     public Artefact artefact(){return this.artefact;}
-
-    /*******************/
-    /**    Méthode    **/
-    /*******************/
-
-    /**
-     * Setter Artefact
-     *
-     *
-     * @param artefact artefact
-     **/
-    public void setArtefact(Artefact artefact) {
-        this.artefact = artefact;
-    }
+    public Vector<Integer> getIdJoueurs(){return this.idJoueurs;}
 
     /**
      * Affiche une zone en chaine de caractere
@@ -114,24 +101,9 @@ public class Zone extends JPanel implements MouseListener{
     }
 
     /**
-     * Inonde la zone
-     **/
-    public void inonde(){
-        if (this.etat == Etat.Normale) this.etat = Etat.Inondee;
-        else if (this.etat == Etat.Inondee) this.etat = Etat.Submergee;
-    }
-
-    /**
-     * asseche la zone
-     **/
-    public void asseche(){
-        if (this.etat == Etat.Inondee) this.etat = Etat.Normale;
-    }
-
-    /**
-     * Dessine la zone avec les artefacts et les joueurs dedans
+     * Representation graphique de la zone
      *
-     * @param g le graphique où dessiner
+     * @param g Un graphic
      **/
     public void paintComponent(Graphics g){
         g.setColor(Color.BLUE.darker());
@@ -158,24 +130,37 @@ public class Zone extends JPanel implements MouseListener{
             else if (idJoueurs.get(id) == 1) {g.setColor(Color.CYAN);}
             else if (idJoueurs.get(id) == 2) {g.setColor(Color.YELLOW.darker());}
             else if (idJoueurs.get(id) == 3) {g.setColor(Color.GREEN.darker());}
-            g.fillOval(id*30, 90-id*30, 25, 25);
+            g.fillOval((id+1)*30, 90-(id+1)*30, 25, 25);
         }
     }
 
+    /*******************/
+    /**    Setter     **/
+    /*******************/
+
     /**
-     * affiche les coordonnées de la zone si on clique dessus
+     * Place un artefact sur la zone
      *
-     * @param e evenement
+     * @param artefact un artefact
      **/
-    public void mouseClicked(MouseEvent e) {
-        System.out.print(this.x());
-        System.out.println(this.y());
+    public void setArtefact(Artefact artefact) {
+        this.artefact = artefact;
     }
 
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
+    /**
+     * Inonde la zone
+     **/
+    public void inonde(){
+        if (this.etat == Etat.Normale) this.etat = Etat.Inondee;
+        else if (this.etat == Etat.Inondee) this.etat = Etat.Submergee;
+    }
+
+    /**
+     * Asseche la zone
+     **/
+    public void asseche(){
+        if (this.etat == Etat.Inondee) this.etat = Etat.Normale;
+    }
 
     /**
      * ajoute un joueur dans la zone
@@ -194,4 +179,21 @@ public class Zone extends JPanel implements MouseListener{
     public void removeJoueur(int k) {
         this.idJoueurs.remove(k);
     }
+
+    /**
+     * affiche les coordonnées de la zone si on clique dessus
+     *
+     * @param e evenement
+     **/
+    public void mouseClicked(MouseEvent e) {
+        System.out.print(this.x());
+        System.out.println(this.y());
+    }
+
+    public void mousePressed(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+
+
 }
