@@ -9,21 +9,25 @@ import java.awt.event.ActionListener;
 
 public class Controleur implements ActionListener {
 
+    //Controle sur une fenetre et un modele
     private Fenetre fenetre;
     private Ile ile;
 
+    //Construction
     public Controleur(){
         this.ile = new Ile(6, 1, 1);
         this.fenetre = new Fenetre();
         this.initActionListener();
     }
 
+    //Boutons fonctionnels
     public void initActionListener(){
         for (int k=0; k<fenetre.boutons().size(); k++){
             fenetre.bouton(k).addActionListener(this);
         }
     }
 
+    //gestion des évènements
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source =  e.getSource();
@@ -67,7 +71,7 @@ public class Controleur implements ActionListener {
 
     }
 
-
+    //Fonction main
     public static void main(String[] args){
         Controleur control = new Controleur();   //Controleur
     }

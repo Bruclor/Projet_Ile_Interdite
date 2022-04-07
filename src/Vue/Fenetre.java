@@ -19,17 +19,20 @@ public class Fenetre extends JFrame {
     //Grille de jeu
     private Grille jeu = new Grille(6, 6);
 
+    //Initialisation de la fenetre
     public Fenetre(){
         this.setTitle("L'ile Interdite");
         this.setSize(new Dimension(800, 600));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.initBouton();
         this.initCommandes();
         this.setContentPane(this.menu);
         this.setVisible(true);
     }
 
+    //Initalisation des Boutons
     public void initBouton(){
         this.addBouton(new Bouton("Nouvelle Partie", Color.WHITE));
         this.addBouton(new Bouton("Parametres", Color.WHITE));
@@ -44,10 +47,11 @@ public class Fenetre extends JFrame {
         this.addBouton(new Bouton("Fin de Tour", Color.WHITE));
     }
 
+    //Methode d'ajout d'un bouton
     public void addBouton(Bouton b){this.boutons.add(b);}
 
-    public Bouton getBouton(int k){return this.boutons.get(k);}
 
+    //Initalisation des panneaux de commande
     public void initCommandes(){
         this.menu.add(this.boutons.get(0));
         this.menu.add(this.boutons.get(1));
@@ -65,16 +69,20 @@ public class Fenetre extends JFrame {
         this.actions.add(this.boutons.get(10));
     }
 
+    //Acces aux boutons
     public Vector<Bouton> boutons() {return this.boutons;}
 
+    //Acces à un bouton
     public Bouton bouton(int k){return this.boutons.get(k);}
 
+    //Acces aux panneaux de commande
     public Commandes Menu(){return this.menu;}
     public Commandes Parametres(){return this.parametres;}
     public Commandes Nombres(){return this.nombres;}
     public Commandes Actions(){return this.actions;}
     public Grille Jeu(){return this.jeu;}
 
+    //Methode d'actualisation du jeu
     public void actualise(Ile ile){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -83,6 +91,5 @@ public class Fenetre extends JFrame {
         panel.add(actions);
         this.setContentPane(panel);
     }
-
 
 }
