@@ -73,7 +73,6 @@ public class Ile extends Grille {
      *
      **/
     public void InitJoueurs() {
-        System.out.println(this.nbJoueurs);
         this.joueurs = new Joueur[nbJoueurs];
         Random random = new Random();
         Vector<Zone> dispo = this.getZonesDispo();
@@ -82,7 +81,6 @@ public class Ile extends Grille {
             alea = random.nextInt(dispo.size());
             this.joueurs[k] = new Joueur(k, "J" + k, dispo.get(alea).coord());
             dispo.get(alea).addJoueur(k);
-            System.out.println(dispo.get(alea).getIdJoueurs());
             dispo.remove(alea);
         }
     }
