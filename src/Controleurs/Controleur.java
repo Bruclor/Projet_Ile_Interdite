@@ -66,7 +66,9 @@ public class Controleur implements ActionListener {
         } else if (fenetre.bouton(10).equals(source)) { //Fin de tour
             this.ile.finDeTour();
             this.fenetre.actualise(this.ile);
-        }
+        } else if (fenetre.bouton(11).equals(source)){ //Chercher une clé
+            this.ile.chercheCle(JoueurEnJeu);
+
         this.fenetre.setVisible(true);
 
     }

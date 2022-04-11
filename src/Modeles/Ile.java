@@ -24,6 +24,9 @@ public class Ile extends Grille {
     private int nbArtefacts;
     private int nbJoueurs;
     private int tour;
+    private Joueur JoueurEnJeu;
+
+
     private ChangeParametre param = ChangeParametre.Joueurs;
 
     /*******************/
@@ -281,7 +284,25 @@ public class Ile extends Grille {
             dispo.get(alea).inonde();
             dispo.remove(alea);
         }
+
+        JoueurEnJeu = joueurs[(JoueurEnJeu.id()+1)%joueurs.length];
     }
+    /**
+    public void actualiseArtefactEnPossession(){
+        for (int k=0; k<joueurs.length; k++){
+            if (joueurs[k].possedeArtefact(Artefact.Air)){this.artefactsRecuperes[0] = true; break;}
+        }
+        for (int k=0; k<joueurs.length; k++){
+            if (joueurs[k].possedeArtefact(Artefact.Eau)){this.artefactsRecuperes[1] = true; break;}
+        }
+        for (int k=0; k<joueurs.length; k++){
+            if (joueurs[k].possedeArtefact(Artefact.Feu)){this.artefactsRecuperes[2] = true; break;}
+        }
+        for (int k=0; k<joueurs.length; k++){
+            if (joueurs[k].possedeArtefact(Artefact.Terre)){this.artefactsRecuperes[3] = true; break;}
+        }
+    }
+     **/
 
     /**
      * Indique le type de parametrage effectué

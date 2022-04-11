@@ -45,6 +45,8 @@ public class Fenetre extends JFrame {
         this.addBouton(new Bouton("4", Color.WHITE));
         this.addBouton(new Bouton("Arreter la partie", Color.RED));
         this.addBouton(new Bouton("Fin de Tour", Color.WHITE));
+        this.addBouton(new Bouton("Chercher", Color.WHITE));
+
     }
 
     //Methode d'ajout d'un bouton
