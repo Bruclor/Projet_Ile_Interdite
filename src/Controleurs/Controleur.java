@@ -39,35 +39,35 @@ public class Controleur implements ActionListener {
             this.ile.InitArtefacts();
             this.ile.InitZoneIG();
             this.fenetre.actualise(this.ile);
-        } else if (fenetre.bouton(1).equals(source)) { //Parametres
+        } else if (fenetre.bouton(1) == source) { //Parametres
             this.fenetre.setContentPane(fenetre.Parametres());
-        } else if (fenetre.bouton(2).equals(source)) { //Retour
+        } else if (fenetre.bouton(2) == source) { //Retour
             this.fenetre.setContentPane(fenetre.Menu());
-        } else if (fenetre.bouton(3).equals(source)) { //Nombre de Joueurs
+        } else if (fenetre.bouton(3) == source) { //Nombre de Joueurs
             this.ile.parametrage(ChangeParametre.Joueurs);
             this.fenetre.setContentPane(fenetre.Nombres());
-        } else if (fenetre.bouton(4).equals(source)) { //Nombre d'artefacts
+        } else if (fenetre.bouton(4) == source) { //Nombre d'artefacts
             this.ile.parametrage(ChangeParametre.Artefacts);
             this.fenetre.setContentPane(fenetre.Nombres());
-        } else if (fenetre.bouton(5).equals(source)) { //1
+        } else if (fenetre.bouton(5) == source) { //1
             this.ile.operateParam(1);
             this.fenetre.setContentPane(fenetre.Parametres());
-        } else if (fenetre.bouton(6).equals(source)) { //2
+        } else if (fenetre.bouton(6) == source) { //2
             this.ile.operateParam(2);
             this.fenetre.setContentPane(fenetre.Parametres());
-        } else if (fenetre.bouton(7).equals(source)) { //3
+        } else if (fenetre.bouton(7) == source) { //3
             this.ile.operateParam(3);
             this.fenetre.setContentPane(fenetre.Parametres());
-        } else if (fenetre.bouton(8).equals(source)) { //4
+        } else if (fenetre.bouton(8) == source) { //4
             this.ile.operateParam(4);
             this.fenetre.setContentPane(fenetre.Parametres());
-        } else if (fenetre.bouton(9).equals(source)) { //Arreter la partie
+        } else if (fenetre.bouton(9) == source) { //Arreter la partie
             this.fenetre.setContentPane(fenetre.Menu());
-        } else if (fenetre.bouton(10).equals(source)) { //Fin de tour
+        } else if (fenetre.bouton(10) == source) { //Fin de tour
             this.ile.finDeTour();
             this.fenetre.actualise(this.ile);
-        } else if (fenetre.bouton(11).equals(source)){ //Chercher une clé
-            this.ile.chercheCle(JoueurEnJeu);
+        } //else if (fenetre.bouton(11).equals(source)){ //Chercher une clé
+            //this.ile.chercheCle(JoueurEnJeu);
 
         this.fenetre.setVisible(true);
 

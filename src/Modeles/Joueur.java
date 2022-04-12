@@ -20,7 +20,7 @@ public class Joueur {
   
   /* Statut */
   private boolean enJeu;
-  private int action;
+  private int nbActions;
   
   /* Nombre de clés associées à chaque élément */
   Dictionary<Artefact, Integer> cles = new Hashtable<Artefact, Integer>(4);
@@ -125,8 +125,11 @@ public class Joueur {
    **/
   public boolean possedeArtefact(Artefact artefact){return this.artefacts.get(artefact) > 0;}
 
+  public int getNbActions(){return this.nbActions;}
+
+
   /*******************/
-  /**    Méthode    **/
+  /**    Setter     **/
   /*******************/
 
   /**
@@ -193,13 +196,16 @@ public class Joueur {
     }
   }
 
+  public void effectueAction(){ this.nbActions--;}
 
   /**
    * Elimine le joueur
-   **/
-  public void estElimine(){
-    this.enJeu = false;
-  }
+   *
+   * @return*/
+  public void elimine(){this.enJeu = false;}
+
+  public boolean estElimine(){return this.enJeu;}
+
 
 
 

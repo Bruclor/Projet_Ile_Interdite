@@ -3,6 +3,8 @@ package Modeles;
 import Vue.*;
 import Controleurs.*;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Random;
 import java.util.Vector;
 
@@ -24,8 +26,8 @@ public class Ile extends Grille {
     private int nbArtefacts;
     private int nbJoueurs;
     private int tour;
-    private Joueur JoueurEnJeu;
-
+    private int idJoueurEnJeu;
+    private Dictionary<Artefact, Boolean> artefactsRecuperes = new Hashtable(4);
 
     private ChangeParametre param = ChangeParametre.Joueurs;
 
@@ -69,6 +71,7 @@ public class Ile extends Grille {
             }
         }
         this.tour = 0;
+
     }
 
     /**
@@ -86,6 +89,7 @@ public class Ile extends Grille {
             dispo.get(alea).addJoueur(k);
             dispo.remove(alea);
         }
+        this.idJoueurEnJeu = 0;
     }
 
 
@@ -120,6 +124,10 @@ public class Ile extends Grille {
             dispo.get(alea).setArtefact(Artefact.Eau);
             dispo.remove(alea);
         }
+        this.artefactsRecuperes.put(Artefact.Air, false);
+        this.artefactsRecuperes.put(Artefact.Eau, false);
+        this.artefactsRecuperes.put(Artefact.Feu, false);
+        this.artefactsRecuperes.put(Artefact.Terre, false);
 
     }
 
@@ -215,42 +223,47 @@ public class Ile extends Grille {
     /**
      * Un joueur se déplace vers une zone
      *
-     * @param j identifiant du joueur
      * @param dest destination
      **/
-    public void deplace(Joueur j, Zone dest) {
+    public void deplace(Zone dest) {
+        Joueur j = joueurs[idJoueurEnJeu];
         Vector<Coord> adjacents = this.adjacents(this.zone(j.x(), j.y()));
-        if (adjacents.contains(dest) && dest.etat() != Etat.Submergee) {
+        if (adjacents.contains(dest) && dest.etat() != Etat.Submergee && j.getNbActions() > 0) {
             j.deplace(new Coord(dest.x(), dest.y()));
+            j.effectueAction();
         }
     }
 
     /**
      * Un joueur asseche un zone
      *
-     * @param j identifiant du joueur
      * @param zone zone a assecher
      **/
-    public void asseche(Joueur j, Zone zone) {
+    public void asseche(Zone zone) {
+        Joueur j = joueurs[idJoueurEnJeu];
         Vector<Coord> adjacents = this.adjacents(this.zone(j.x(), j.y()));
-        if ((adjacents.contains(zone) || (j.x() == zone.x() && j.y() == zone.y())) && zone.etat() == Etat.Inondee) {
+        if ((adjacents.contains(zone) || (j.x() == zone.x() && j.y() == zone.y())) && zone.etat() == Etat.Inondee && j.getNbActions() > 0) {
             zone.asseche();
+            j.effectueAction();
         }
     }
 
     /**
      * Un joueur cherche une clé
      *
-     * @param j identifiant du joueur
      **/
-    public void chercheCle(Joueur j) {
-        Random random = new Random();
-        int r = random.nextInt(6);
-        if (r == 0) j.ajouteCle(Artefact.Air);
-        if (r == 1) j.ajouteCle(Artefact.Eau);
-        if (r == 2) j.ajouteCle(Artefact.Feu);
-        if (r == 3) j.ajouteCle(Artefact.Terre);
-        if (r == 4 || r == 5) grille[j.x()][j.y()].inonde();
+    public void chercheCle() {
+        Joueur j  = joueurs[idJoueurEnJeu];
+        if (j.getNbActions() > 0) {
+            Random random = new Random();
+            int r = random.nextInt(6);
+            if (r == 0) j.ajouteCle(Artefact.Air);
+            if (r == 1) j.ajouteCle(Artefact.Eau);
+            if (r == 2) j.ajouteCle(Artefact.Feu);
+            if (r == 3) j.ajouteCle(Artefact.Terre);
+            if (r == 4 || r == 5) grille[j.x()][j.y()].inonde();
+            j.effectueAction();
+        }
     }
 
     /**
@@ -285,8 +298,31 @@ public class Ile extends Grille {
             dispo.remove(alea);
         }
 
-        JoueurEnJeu = joueurs[(JoueurEnJeu.id()+1)%joueurs.length];
+        this.joueurSuivant();
+
     }
+
+    public void joueurSuivant() {
+        int nb = this.nbJoueurs;
+        int iter = 0;
+        do {
+            iter++;
+            if (this.idJoueurEnJeu == nb-1){
+                this.idJoueurEnJeu = 0;
+            } else {
+                this.idJoueurEnJeu++;
+            }
+        } while (joueurs[idJoueurEnJeu].estElimine() && iter <= nb);
+    }
+
+    public void artefactRecupere(Artefact a){
+        this.artefactsRecuperes.put(a, true);
+    }
+
+    public boolean possedeArtefact(Artefact a){
+        return artefactsRecuperes.get(a);
+    }
+
     /**
     public void actualiseArtefactEnPossession(){
         for (int k=0; k<joueurs.length; k++){
@@ -329,4 +365,19 @@ public class Ile extends Grille {
                 break;
         }
     }
+
+    public boolean GameOver(){
+        /** Améliorer la fonction en testant :
+         * - Si un artefact non recupéré n'est plus accesible -> game over
+         * - Si l'héliport est inaccessible -> game over
+         */
+        for (int k=0; k<this.joueurs.length; k++){
+            if (! joueurs[k].estElimine()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }

@@ -1,8 +1,12 @@
 package Vue;
 
+import Modeles.Artefact;
 import Modeles.Ile;
+import Modeles.Joueur;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.Dictionary;
 import java.util.Vector;
 
 public class Fenetre extends JFrame {
@@ -15,6 +19,7 @@ public class Fenetre extends JFrame {
     private Commandes parametres = new Commandes("parametres", Color.BLUE);
     private Commandes actions = new Commandes("actions", Color.BLUE);
     private Commandes nombres = new Commandes("nombres", Color.BLUE);
+    private Commandes inventaire = new Commandes("inventaire", Color.BLUE);
 
     //Grille de jeu
     private Grille jeu = new Grille(6, 6);
@@ -22,7 +27,7 @@ public class Fenetre extends JFrame {
     //Initialisation de la fenetre
     public Fenetre(){
         this.setTitle("L'ile Interdite");
-        this.setSize(new Dimension(800, 600));
+        this.setSize(new Dimension(1000, 600));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -69,6 +74,11 @@ public class Fenetre extends JFrame {
 
         this.actions.add(this.boutons.get(9));
         this.actions.add(this.boutons.get(10));
+
+        this.informations.add(this.inventaireEquipe);
+        this.informations.add(this.joueurEnJeu);
+        this.informations.add(this.inventaireJoueur);
+        this.informations.add(this.actionsRestantes);
     }
 
     //Acces aux boutons
@@ -82,16 +92,41 @@ public class Fenetre extends JFrame {
     public Commandes Parametres(){return this.parametres;}
     public Commandes Nombres(){return this.nombres;}
     public Commandes Actions(){return this.actions;}
+    public Commandes Informations(){return this.informations;}
     public Grille Jeu(){return this.jeu;}
+
+
 
     //Methode d'actualisation du jeu
     public void actualise(Ile ile){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         this.jeu = ile;
-        panel.add(jeu, BorderLayout.WEST);
-        panel.add(actions);
+        this.inventaire = this.actualiseInventaire();
+        informations.setPreferredSize(new Dimension(200, 600));
+        panel.add(informations, BorderLayout.EAST);
+        actions.setPreferredSize(new Dimension(200, 600));
+        panel.add(actions, BorderLayout.WEST);
+        panel.add(jeu);
+
+
         this.setContentPane(panel);
+    }
+
+    private void actualiseInventaire(Dictionary<Artefact, Boolean> artefacts, Joueur enJeu) {
+        Commandes newInventaire = new Commandes("Inventaire", Color.WHITE);
+        newInventaire.add(new Texte("Artefacts recupérés : ", Color.WHITE));
+        if (artefacts.get(Artefact.Air)){newInventaire.add(new Texte("  Air  ", Color.CYAN));}
+        if (artefacts.get(Artefact.Eau)){newInventaire.add(new Texte("  Eau  ", Color.CYAN.darker()));}
+        if (artefacts.get(Artefact.Feu)){newInventaire.add(new Texte("  Feu  ", Color.RED));}
+        if (artefacts.get(Artefact.Terre)){newInventaire.add(new Texte(" Terre ", Color.ORANGE));}
+        newInventaire.add(new Texte("Clés du joueur : ", Color.WHITE));
+
+        newInventaire.add(new Texte("Clés du joueur : ", Color.WHITE));
+
+        private Texte inventaireJoueur = new Texte("Clés du joueur : ", Color.WHITE);
+        private Texte joueurEnJeu = new Texte("Tour du joueur : ", Color.WHITE);
+        private Texte actionsRestantes = new Texte("Actions restantes : ", Color.WHITE);
     }
 
 }
