@@ -50,7 +50,7 @@ public class Fenetre extends JFrame {
         this.addBouton(new Bouton("4", Color.WHITE));
         this.addBouton(new Bouton("Arreter la partie", Color.RED));
         this.addBouton(new Bouton("Fin de Tour", Color.WHITE));
-        this.addBouton(new Bouton("Chercher", Color.WHITE));
+        this.addBouton(new Bouton("Chercher une clé", Color.WHITE));
 
     }
 
@@ -74,6 +74,7 @@ public class Fenetre extends JFrame {
 
         this.actions.add(this.boutons.get(9));
         this.actions.add(this.boutons.get(10));
+        this.actions.add(this.boutons.get(11));
 
     }
 

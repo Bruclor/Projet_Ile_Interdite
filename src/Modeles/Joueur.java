@@ -207,9 +207,8 @@ public class Joueur {
   public boolean estElimine(){return this.enJeu;}
 
 
-
-
-
-
+  public void setNbActions(int i) {
+     this.nbActions = i;
+  }
 }
   

@@ -90,6 +90,7 @@ public class Ile extends Grille {
             dispo.remove(alea);
         }
         this.idJoueurEnJeu = 0;
+        this.joueurs[idJoueurEnJeu].setNbActions(3);
     }
 
 
@@ -317,6 +318,8 @@ public class Ile extends Grille {
                 this.idJoueurEnJeu++;
             }
         } while (joueurs[idJoueurEnJeu].estElimine() && iter <= nb);
+        joueurs[idJoueurEnJeu].setNbActions(3);
+
     }
 
     public void artefactRecupere(Artefact a){
