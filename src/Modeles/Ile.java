@@ -85,7 +85,7 @@ public class Ile extends Grille {
         int alea;
         for (int k = 0; k < nbJoueurs; k++) {
             alea = random.nextInt(dispo.size());
-            this.joueurs[k] = new Joueur(k, "J" + k, dispo.get(alea).coord());
+            this.joueurs[k] = new Joueur(k, "J" + (k+1), dispo.get(alea).coord());
             dispo.get(alea).addJoueur(k);
             dispo.remove(alea);
         }
@@ -302,6 +302,10 @@ public class Ile extends Grille {
 
     }
 
+    public Joueur joueurEnJeu(){
+        return this.joueurs[idJoueurEnJeu];
+    }
+
     public void joueurSuivant() {
         int nb = this.nbJoueurs;
         int iter = 0;
@@ -322,6 +326,8 @@ public class Ile extends Grille {
     public boolean possedeArtefact(Artefact a){
         return artefactsRecuperes.get(a);
     }
+
+    public Dictionary<Artefact, Boolean> getArtefactsRecuperes(){return this.artefactsRecuperes;}
 
     /**
     public void actualiseArtefactEnPossession(){

@@ -9,5 +9,10 @@ public class Texte extends JLabel {
         this.setText(text);
         this.setForeground(color);
     }
+    public Texte(String text, Color color, Dimension dimension){
+        this.setText(text);
+        this.setForeground(color);
+        this.setPreferredSize(dimension);
+    }
 
 }

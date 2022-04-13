@@ -75,10 +75,6 @@ public class Fenetre extends JFrame {
         this.actions.add(this.boutons.get(9));
         this.actions.add(this.boutons.get(10));
 
-        this.informations.add(this.inventaireEquipe);
-        this.informations.add(this.joueurEnJeu);
-        this.informations.add(this.inventaireJoueur);
-        this.informations.add(this.actionsRestantes);
     }
 
     //Acces aux boutons
@@ -87,12 +83,12 @@ public class Fenetre extends JFrame {
     //Acces à un bouton
     public Bouton bouton(int k){return this.boutons.get(k);}
 
-    //Acces aux panneaux de commande
+    //Acces aux panneaux
     public Commandes Menu(){return this.menu;}
     public Commandes Parametres(){return this.parametres;}
     public Commandes Nombres(){return this.nombres;}
     public Commandes Actions(){return this.actions;}
-    public Commandes Informations(){return this.informations;}
+    public Commandes Inventaire(){return this.inventaire;}
     public Grille Jeu(){return this.jeu;}
 
 
@@ -101,32 +97,61 @@ public class Fenetre extends JFrame {
     public void actualise(Ile ile){
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        this.jeu = ile;
-        this.inventaire = this.actualiseInventaire();
-        informations.setPreferredSize(new Dimension(200, 600));
-        panel.add(informations, BorderLayout.EAST);
-        actions.setPreferredSize(new Dimension(200, 600));
-        panel.add(actions, BorderLayout.WEST);
-        panel.add(jeu);
 
+        this.actions.setPreferredSize(new Dimension(200, 600));
+
+
+        this.jeu = ile;
+
+        this.actualiseInventaire(ile.getArtefactsRecuperes(), ile.joueurEnJeu());
+        this.inventaire.setPreferredSize(new Dimension(200, 600));
+
+        panel.add(actions, BorderLayout.WEST);
+        panel.add(this.inventaire, BorderLayout.EAST);
+        panel.add(jeu);
 
         this.setContentPane(panel);
     }
 
     private void actualiseInventaire(Dictionary<Artefact, Boolean> artefacts, Joueur enJeu) {
-        Commandes newInventaire = new Commandes("Inventaire", Color.WHITE);
-        newInventaire.add(new Texte("Artefacts recupérés : ", Color.WHITE));
-        if (artefacts.get(Artefact.Air)){newInventaire.add(new Texte("  Air  ", Color.CYAN));}
-        if (artefacts.get(Artefact.Eau)){newInventaire.add(new Texte("  Eau  ", Color.CYAN.darker()));}
-        if (artefacts.get(Artefact.Feu)){newInventaire.add(new Texte("  Feu  ", Color.RED));}
-        if (artefacts.get(Artefact.Terre)){newInventaire.add(new Texte(" Terre ", Color.ORANGE));}
-        newInventaire.add(new Texte("Clés du joueur : ", Color.WHITE));
+        
+        Commandes newInventaire = new Commandes("Inventaire", Color.BLUE);
 
-        newInventaire.add(new Texte("Clés du joueur : ", Color.WHITE));
+        newInventaire.add(new Texte("Artefacts recupérés : ", Color.WHITE, new Dimension(199, 50)));
+        if (artefacts.get(Artefact.Air)){
+            newInventaire.add(new Texte("  Air  ", Color.CYAN, new Dimension(50,10)));
+        } else {
+            newInventaire.add(new Texte("       ", Color.CYAN, new Dimension(50,10)));
+        }
+        if (artefacts.get(Artefact.Eau)){
+            newInventaire.add(new Texte("  Eau  ", Color.CYAN.darker(), new Dimension(50,10)));
+        } else {
+            newInventaire.add(new Texte("       ", Color.CYAN, new Dimension(50,10)));
+        }
+        if (artefacts.get(Artefact.Feu)){
+            newInventaire.add(new Texte("  Feu  ", Color.RED, new Dimension(50,10)));
+        } else {
+            newInventaire.add(new Texte("       ", Color.RED, new Dimension(50,10)));
+        }
+        if (artefacts.get(Artefact.Terre)){
+            newInventaire.add(new Texte(" Terre ", Color.ORANGE, new Dimension(50,10)));
+        } else {
+            newInventaire.add(new Texte("       ", Color.ORANGE, new Dimension(50,10)));
+        }
+        
+        newInventaire.add(new Texte ("Tour du joueur : "+enJeu.nom(), Color.WHITE, new Dimension(199, 50)));
+            
+        newInventaire.add(new Texte ("Clés du joueur : ", Color.WHITE, new Dimension(199, 50)));
+        newInventaire.add(new Texte ("Air : "+enJeu.nbCles(Artefact.Air), Color.CYAN, new Dimension(199, 10)));
+        newInventaire.add(new Texte ("Eau : "+enJeu.nbCles(Artefact.Eau), Color.CYAN.darker(), new Dimension(199, 10)));
+        newInventaire.add(new Texte ("Feu : "+enJeu.nbCles(Artefact.Feu), Color.RED, new Dimension(199, 10)));
+        newInventaire.add(new Texte ("Terre : "+enJeu.nbCles(Artefact.Terre), Color.ORANGE, new Dimension(199, 10)));
 
-        private Texte inventaireJoueur = new Texte("Clés du joueur : ", Color.WHITE);
-        private Texte joueurEnJeu = new Texte("Tour du joueur : ", Color.WHITE);
-        private Texte actionsRestantes = new Texte("Actions restantes : ", Color.WHITE);
+        newInventaire.add(new Texte ("Actions restantes : "+enJeu.getNbActions(), Color.WHITE, new Dimension(199, 50)));
+
+        this.inventaire = newInventaire;
+
+        
     }
 
 }
