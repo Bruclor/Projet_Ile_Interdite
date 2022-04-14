@@ -3,11 +3,11 @@ package Vue;
 import javax.swing.*;
 import java.awt.*;
 
-public class Commandes extends JPanel {
+public class Panneau extends JPanel {
 
     private String nom;
 
-    public Commandes(String nom, Color fontColor){
+    public Panneau(String nom, Color fontColor){
         this.setBackground(fontColor);
         this.setLayout(new FlowLayout());
     }
