@@ -3,41 +3,44 @@ package Modeles;
 import Vue.*;
 import Controleurs.*;
 
+import java.awt.*;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Random;
 import java.util.Vector;
 
-/**
- * Une ile avec une grille d'une certaine taille
- * Une ile posssede un ou plusieurs joueurs
- **/
-import static Controleurs.ChangeParametre.*;
+/* =============================================
+ * =                                           =
+ * =              CLASSE ILE                   =
+ * =                                           =
+ * =============================================
+ */
 
 public class Ile extends Grille {
 
-    /*******************/
-    /**   Attributs   **/
-    /*******************/
 
-    private int taille;
-    private Zone[][] grille;
-    private Joueur[] joueurs;
-    private int nbArtefacts;
-    private int nbJoueurs;
-    private int tour;
-    private int idJoueurEnJeu;
-    private Dictionary<Artefact, Boolean> artefactsRecuperes = new Hashtable(4);
+    /*
+      ===========================================
+      =                ATTRIBUTS                =
+      ===========================================
+     */
 
-    private ChangeParametre param = ChangeParametre.Joueurs;
+    private int taille;                                                                        //Taille de la grille
+    private Zone[][] grille;                                                                   //Grille de jeu
+    private Joueur[] joueurs;                                                                  //Liste des joueurs
+    private int nbArtefacts;                                                                   //Nombre d'artefacts
+    private int nbJoueurs;                                                                     //Nombre de joueurs
+    private int idJoueurEnJeu;                                                                 //id du joueur en jeu
+    private Dictionary<Artefact, Boolean> artefactsRecuperes = new Hashtable(4);    //Artefacts de l'équipe
+    private ChangeParametre param = ChangeParametre.Joueurs;                                   //Le parametre modifié
 
-    /*******************/
-    /** Constructeur  **/
-    /*******************/
+    /*
+      ===========================================
+      =              CONSTRUCTEUR               =
+      ===========================================
+     */
 
-    /**
-     * Constructeur
-     *
+    /** -- Construit l'ile du jeu
      * @param taille taille de l'ile
      * @param nbJoueurs nombre de joueurs
      * @param nbArtefacts nombre d'artefacts de chaque type
@@ -70,12 +73,177 @@ public class Ile extends Grille {
                 }
             }
         }
-        this.tour = 0;
 
     }
 
+    /*
+      ===========================================
+      =                GETTER                   =
+      ===========================================
+     */
+
+
+    /** --Retourne la taille de la grille
+     *
+     * @return la taille de l'ile
+     **/
+    public int taille() {
+        return this.taille;
+    }
+
+
+    /** --Retourne la grille du jeu
+     *
+     * @return la grille de l'ile
+     **/
+    public Zone[][] grille() {
+        return this.grille;
+    }
+
+
+    /** --Retourne le nombre de joueurs
+     *
+     * @return le nombre d'artefacts
+     */
+    public int getNbJoueurs(){return this.nbJoueurs;}
+
+
+    /** --Retourne le nombre d'artefacts de chaque type
+     *
+     * @return le nombre d'artefacts
+     */
+    public int getNbArtefacts(){return this.nbArtefacts;}
+
+
+    /** -- Retourne la liste des joueurs
+     *
+     * @return tableau des joueurs
+     **/
+    public Joueur[] getJoueurs() {
+        return joueurs;
+    }
+
+    /** -- Retourne le joueur d'identifiant k
+     *
+     * @return joueur[k]
+     **/
+    public Joueur getJoueur(int k) {
+        if (k >=0 && k<joueurs.length) {
+            return joueurs[k];
+        }
+        throw new ArrayIndexOutOfBoundsException();
+    }
+
+    /** -- Retourne le joueur en jeu
+     *
+     * @return joueur en jeu
+     **/
+    public Joueur joueurEnJeu(){
+        return this.joueurs[idJoueurEnJeu];
+    }
+
+    /** -- Retourne la zone de coord (x, y) dans la grille
+     *
+     * @param x abscisse
+     * @param y ordonnée
+     *
+     * @return zone de coord (x, y)
+     **/
+    public Zone zone(int x, int y) {
+        return grille[x][y];
+    }
+
+    public Zone zone(Coord coord){
+        return grille[coord.x()][coord.y()];
+    }
+
+    /** -- Retourne le vecteur des zones adjacentes d'une zone
+     *
+     * @param coord la zone dont on veut connaitre les voisins
+     *
+     * @return vecteur des zones autour de la zone
+     **/
+    public Vector<Coord> adjacents(Coord coord) {
+        Vector<Coord> adj = new Vector<Coord>();
+        if (coord.x() < this.taille - 1) {
+            adj.add(new Coord(coord.x() + 1, coord.y()));
+        }
+        if (coord.x() > 0) {
+            adj.add(new Coord(coord.x() - 1, coord.y()));
+        }
+        if (coord.y() < this.taille - 1) {
+            adj.add(new Coord(coord.x(), coord.y() + 1));
+        }
+        if (coord.y() > 0) {
+            adj.add(new Coord(coord.x(), coord.y() - 1));
+        }
+        return adj;
+    }
+
+    /** -- Retourne un vecteur des zones non submergées
+     *
+     * @return vecteurs des zones dispos
+     **/
+    public Vector<Zone> getZonesDispo() {
+        Vector<Zone> dispo = new Vector<Zone>();
+        for (int x = 0; x < this.taille; x++) {
+            for (int y = 0; y < this.taille; y++) {
+                if (this.zone(x, y).etat() != Etat.Submergee) {
+                    dispo.add(this.zone(x, y));
+                }
+            }
+        }
+        return dispo;
+    }
+
+    /** -- Indique si l'artefact a a été recupere
+     *
+     * @param a un artefact
+     *
+     * @return booleen vrai si l'artefact a été recupere
+     **/
+    public boolean possedeArtefact(Artefact a){
+        return artefactsRecuperes.get(a);
+    }
+
+    /** -- Retourne quatre booleen indiquant quels artefacts sont recuperes
+     *
+     * @return Dict<Artefact, booleen>
+     **/
+    public Dictionary<Artefact, Boolean> getArtefactsRecuperes(){return this.artefactsRecuperes;}
+
+    /** -- Indique le type de parametrage effectué
+     *
+     * @param p le type de parametrage
+     */
+    public void parametrage(ChangeParametre p){this.param = p;}
+
+
+    /** -- Indique si l'équipe a perdu
+     *
+     * @return booleen vrai s'il y a une défaite
+     **/
+    public boolean GameOver(){
+        /* Améliorer la fonction en testant :
+         * - Si un artefact non recupéré n'est plus accesible -> game over
+         * - Si l'héliport est inaccessible -> game over
+         */
+        for (int k=0; k<this.joueurs.length; k++){
+            if (! joueurs[k].estElimine()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*
+      ===========================================
+      =                 SETTER                  =
+      ===========================================
+     */
+
     /**
-     * Initialise les joueurs de l'ile
+     * -- Methode initialisation des joueurs de l'ile
      *
      **/
     public void InitJoueurs() {
@@ -85,8 +253,14 @@ public class Ile extends Grille {
         int alea;
         for (int k = 0; k < nbJoueurs; k++) {
             alea = random.nextInt(dispo.size());
-            this.joueurs[k] = new Joueur(k, "J" + (k+1), dispo.get(alea).coord());
-            dispo.get(alea).addJoueur(k);
+            switch (k){
+                case 0: this.joueurs[k] = new Joueur(k, "J" + (k+1), dispo.get(alea).coord(), Color.RED); break;
+                case 1: this.joueurs[k] = new Joueur(k, "J" + (k+1), dispo.get(alea).coord(), Color.GREEN); break;
+                case 2: this.joueurs[k] = new Joueur(k, "J" + (k+1), dispo.get(alea).coord(), Color.BLUE.darker()); break;
+                case 3: this.joueurs[k] = new Joueur(k, "J" + (k+1), dispo.get(alea).coord(), Color.ORANGE); break;
+
+            }
+            dispo.get(alea).addJoueur(joueurs[k]);
             dispo.remove(alea);
         }
         this.idJoueurEnJeu = 0;
@@ -94,9 +268,7 @@ public class Ile extends Grille {
     }
 
 
-    /**
-     * Initialise les artefacts de l'ile
-     *
+    /** -- Methode initialisation des artefacts de l'ile
      **/
     public void InitArtefacts() {
         Random random = new Random();
@@ -132,6 +304,8 @@ public class Ile extends Grille {
 
     }
 
+    /** -- Methode initialisation des zones graphiques de l'ile
+     **/
     public void InitZoneIG(){
         for (int x=0; x<this.taille; x++){
             for (int y=0; y<this.taille; y++){
@@ -141,151 +315,77 @@ public class Ile extends Grille {
 
     }
 
-    /*******************/
-    /**    Getter     **/
-    /*******************/
-
-    /**
-     * Getter grille
-     *
-     * @return la grille de l'ile
+    /** -- Modifie le nombre d'artefacts de l'ile
      **/
-    public Zone[][] grille() {
-        return this.grille;
-    }
-
-    /**
-     * Getter taille
-     *
-     * @return la taille de l'ile
-     **/
-    public int taille() {
-        return this.taille;
-    }
-
-    public int getNbArtefacts(){return this.nbArtefacts;}
     public void setNbArtefacts(int n) {
         if (n > 0 && n < 5) {
             nbArtefacts = n;
         }
     }
 
-    public int getNbJoueurs(){return this.nbJoueurs;}
-
-    /**
-     * Getter grille
+    /** -- Deplace le joueur en jeu vers une zone de destination
      *
-     * @return tableau des joueurs
+     * @param vectDirection le vecteur direction de déplacement
      **/
-    public Joueur[] getJoueurs() {
-        return joueurs;
-    }
-
-    /*******************/
-    /**    Méthode    **/
-    /*******************/
-
-    /**
-     *  renvoie la zone de coord x y dans la grille
-     *
-     * @param x abscisse
-     * @param y ordonnée
-     *
-     * @return zone de coord x y
-     **/
-    public Zone zone(int x, int y) {
-        return grille[x][y];
-    }
-
-    /**
-     * renvoie le vecteur des zones autour d'une zone
-     *
-     * @param zone la zone dont on veut connaitre les voisins
-     *
-     * @return vecteur des zones autour de la zone
-     **/
-    public Vector<Coord> adjacents(Zone zone) {
-        Vector<Coord> adj = new Vector<Coord>();
-        if (zone.x() < this.taille - 1) {
-            adj.add(new Coord(zone.x() + 1, zone.y()));
-        }
-        if (zone.x() > 0) {
-            adj.add(new Coord(zone.x() - 1, zone.y()));
-        }
-        if (zone.y() < this.taille - 1) {
-            adj.add(new Coord(zone.x(), zone.y() + 1));
-        }
-        if (zone.y() > 0) {
-            adj.add(new Coord(zone.x() + 1, zone.y()));
-        }
-        return adj;
-    }
-
-    /**
-     * Un joueur se déplace vers une zone
-     *
-     * @param dest destination
-     **/
-    public void deplace(Zone dest) {
+    public void deplace(Coord vectDirection) {
         Joueur j = joueurs[idJoueurEnJeu];
-        Vector<Coord> adjacents = this.adjacents(this.zone(j.x(), j.y()));
-        if (adjacents.contains(dest) && dest.etat() != Etat.Submergee && j.getNbActions() > 0) {
-            j.deplace(new Coord(dest.x(), dest.y()));
-            j.effectueAction();
+        Coord dest = new Coord(j.x() + vectDirection.x(), j.y()+ vectDirection.y());
+        Vector<Coord> adjacents = adjacents(j.coord());
+        System.out.println("Joueur en ("+ j.x() + ", "+ j.y()+") veut aller en ("+ dest.x() + "," + dest.y() + ")");
+        //if (zone(dest).etat() == Etat.Submergee){System.out.println("Mais la zone est submergee !");}
+        for (int k = 0; k<adjacents.size(); k++){
+            System.out.println(adjacents.get(k).x() + " " + adjacents.get(k).y());
+            if (adjacents.get(k).equals(dest)){
+                System.out.println("coord trouvee");
+                if (zone(dest).etat() != Etat.Submergee && j.getNbActions() > 0) {
+                    System.out.println("Un joueur se deplace");
+                    zone(j.x(), j.y()).removeJoueur(j);
+                    j.deplace(dest);
+                    zone(dest).addJoueur(j);
+                    j.effectueAction();
+                    break;
+                }
+            }
         }
+
     }
 
-    /**
-     * Un joueur asseche un zone
+    /** -- Un joueur asseche une zone
      *
      * @param zone zone a assecher
      **/
     public void asseche(Zone zone) {
         Joueur j = joueurs[idJoueurEnJeu];
-        Vector<Coord> adjacents = this.adjacents(this.zone(j.x(), j.y()));
+        Vector<Coord> adjacents = this.adjacents(new Coord (j.x(), j.y()));
         if ((adjacents.contains(zone) || (j.x() == zone.x() && j.y() == zone.y())) && zone.etat() == Etat.Inondee && j.getNbActions() > 0) {
             zone.asseche();
             j.effectueAction();
         }
     }
 
-    /**
-     * Un joueur cherche une clé
-     *
+    /** -- Un joueur cherche une clé
      **/
     public void chercheCle() {
         Joueur j  = joueurs[idJoueurEnJeu];
         if (j.getNbActions() > 0) {
             Random random = new Random();
             int r = random.nextInt(6);
-            if (r == 0) j.ajouteCle(Artefact.Air);
-            if (r == 1) j.ajouteCle(Artefact.Eau);
-            if (r == 2) j.ajouteCle(Artefact.Feu);
-            if (r == 3) j.ajouteCle(Artefact.Terre);
-            if (r == 4 || r == 5) grille[j.x()][j.y()].inonde();
+            if (r == 0) j.gagneCle(Artefact.Air);
+            if (r == 1) j.gagneCle(Artefact.Eau);
+            if (r == 2) j.gagneCle(Artefact.Feu);
+            if (r == 3) j.gagneCle(Artefact.Terre);
+            if (r == 4 || r == 5) {
+                grille[j.x()][j.y()].inonde();
+                if (grille[j.x()][j.y()].etat() == Etat.Submergee){
+                    j.elimine();
+                    grille[j.x()][j.y()].removeJoueur(j);
+                }
+            }
             j.effectueAction();
         }
     }
 
-    /**
-     * revoie un vecteur des zones disponibles
-     *
-     * @return vecteurs des zones dispos
-     **/
-    public Vector<Zone> getZonesDispo() {
-        Vector<Zone> dispo = new Vector<Zone>();
-        for (int x = 0; x < this.taille; x++) {
-            for (int y = 0; y < this.taille; y++) {
-                if (this.zone(x, y).etat() != Etat.Submergee) {
-                    dispo.add(this.zone(x, y));
-                }
-            }
-        }
-        return dispo;
-    }
-
-    /**
-     * Inonde trois cases differentes et termine le tour
+    /** -- Inonde trois cases differentes et termine le tour
      **/
     public void finDeTour() {
         Vector<Zone> dispo = this.getZonesDispo();
@@ -298,15 +398,21 @@ public class Ile extends Grille {
             dispo.get(alea).inonde();
             dispo.remove(alea);
         }
+        for (int k=0; k<joueurs.length; k++) {
+            Joueur j = joueurs[k];
+            if ((!j.estElimine()) && grille[j.x()][j.y()].etat() == Etat.Submergee) {
 
+                System.out.println(j.nom()+" est elimine");
+                j.elimine();
+                grille[j.x()][j.y()].removeJoueur(j);
+            }
+        }
         this.joueurSuivant();
 
     }
 
-    public Joueur joueurEnJeu(){
-        return this.joueurs[idJoueurEnJeu];
-    }
-
+    /** -- Passage au joueur suivant
+     **/
     public void joueurSuivant() {
         int nb = this.nbJoueurs;
         int iter = 0;
@@ -322,39 +428,13 @@ public class Ile extends Grille {
 
     }
 
+    /** -- L'équipe recupere l'artefact a
+     *
+     * @param a l'artefact recupere
+     **/
     public void artefactRecupere(Artefact a){
         this.artefactsRecuperes.put(a, true);
     }
-
-    public boolean possedeArtefact(Artefact a){
-        return artefactsRecuperes.get(a);
-    }
-
-    public Dictionary<Artefact, Boolean> getArtefactsRecuperes(){return this.artefactsRecuperes;}
-
-    /**
-    public void actualiseArtefactEnPossession(){
-        for (int k=0; k<joueurs.length; k++){
-            if (joueurs[k].possedeArtefact(Artefact.Air)){this.artefactsRecuperes[0] = true; break;}
-        }
-        for (int k=0; k<joueurs.length; k++){
-            if (joueurs[k].possedeArtefact(Artefact.Eau)){this.artefactsRecuperes[1] = true; break;}
-        }
-        for (int k=0; k<joueurs.length; k++){
-            if (joueurs[k].possedeArtefact(Artefact.Feu)){this.artefactsRecuperes[2] = true; break;}
-        }
-        for (int k=0; k<joueurs.length; k++){
-            if (joueurs[k].possedeArtefact(Artefact.Terre)){this.artefactsRecuperes[3] = true; break;}
-        }
-    }
-     **/
-
-    /**
-     * Indique le type de parametrage effectué
-     *
-     * @param p le type de parametrage
-     */
-    public void parametrage(ChangeParametre p){this.param = p;}
 
     /**
      * Modifie la valeur du parametre concerné
@@ -374,19 +454,4 @@ public class Ile extends Grille {
                 break;
         }
     }
-
-    public boolean GameOver(){
-        /** Améliorer la fonction en testant :
-         * - Si un artefact non recupéré n'est plus accesible -> game over
-         * - Si l'héliport est inaccessible -> game over
-         */
-        for (int k=0; k<this.joueurs.length; k++){
-            if (! joueurs[k].estElimine()){
-                return false;
-            }
-        }
-        return true;
-    }
-
-
 }
