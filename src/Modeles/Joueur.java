@@ -1,48 +1,56 @@
 package Modeles;
 
+import java.awt.*;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-/**
- * Une joueur avec un id, un nom et des coordonnées
- * Un joueur peut etre en vie ou non
- **/
+/* =============================================
+ * =                                           =
+ * =            CLASSE JOUEUR                  =
+ * =                                           =
+ * =============================================
+ */
+
 public class Joueur {
 
-  /*******************/
-  /**   Attributs   **/
-  /*******************/
+  /*
+    ===========================================
+    =                ATTRIBUTS                =
+    ===========================================
+   */
 
-  /* identifiant et nom du joueur */
-  private int id;
-  private String nom;
-  private Coord coord;
-  
-  /* Statut */
-  private boolean enJeu;
-  private int nbActions;
-  
-  /* Nombre de clés associées à chaque élément */
-  Dictionary<Artefact, Integer> cles = new Hashtable<Artefact, Integer>(4);
-  
-  /* nombre d'artefacts associés à chaque élément */
-  Dictionary<Artefact, Integer> artefacts = new Hashtable<Artefact, Integer>(4);
+  private int id;                                                                    //Identifiant
+  private String nom;                                                                //Nom
+  private Color couleur;                                                             //Couleur
+  private Coord coord;                                                               //Coordonnées
 
-  /*******************/
-  /** Constructeur  **/
-  /*******************/
+  private boolean estElimine;                                                        //Statut du joueur
+  private int nbActions;                                                             //Actions restantes
 
-  /** Constructeur
+  private Dictionary<Artefact, Integer> cles = new Hashtable<Artefact, Integer>(4);       //Nombre de clés
+  private Dictionary<Artefact, Integer> artefacts = new Hashtable<Artefact, Integer>(4);  //Nombre d'artefacts
+
+  /*
+    ===========================================
+    =              CONSTRUCTEUR               =
+    ===========================================
+   */
+
+  /** -- Construit un joueur du jeu
    *
    * @param id identifiant
    * @param nom nom
-   * @param coord Etat Normal, Inondee ou Submergee
+   * @param coord position initiale
+   * @param couleur la couleur de représentation
    **/
-  public Joueur(int id, String nom, Coord coord){
+  public Joueur(int id, String nom, Coord coord, Color couleur){
+
+
     this.coord = coord;
-    this.enJeu = true;
+    this.estElimine = false;
     this.id = id;
     this.nom = nom;
+    this.couleur = couleur;
 
     this.cles.put(Artefact.Air, 0);
     this.cles.put(Artefact.Feu, 0);
@@ -55,127 +63,125 @@ public class Joueur {
     this.artefacts.put(Artefact.Terre, 0);
   }
 
-  /*******************/
-  /**    Getter     **/
-  /*******************/
+  /*
+    ===========================================
+    =                GETTER                   =
+    ===========================================
+   */
 
-  /**
-   * Getter id
+  /** -- Identifiant du joueur
    *
    * @return identifiant
    **/
   public int id(){return this.id;}
 
-  /**
-   * Getter nom
+  /** -- Nom du joueur
    *
    * @return nom
    **/
   public String nom(){return this.nom;}
 
-  /**
-   * Getter coord
+  /** -- Coordonnées du joueur
    *
    * @return Coordonnée
    **/
   public Coord coord(){return this.coord;}
 
-  /**
-   * Getter vivant = True / mort = False
-   *
-   * @return Coordonnée x
-   **/
-  public boolean enJeu() {return this.enJeu;}
 
-  /**
-   * Getter x
+  /** -- Coordonnée x du joueur
    *
    * @return Coordonnée x
    **/
   public int x(){return this.coord.x();}
 
-  /**
-   * Getter y
+  /** -- Coordonnée y du joueur
    *
    * @return Coordonnée y
    **/
   public int y(){return this.coord.y();}
 
-  /**
-   * Renvoie le nombre d'artefact pour un artefact dans l'inventaire
+  /** -- Nombre d'artefacts d'un type récupérés
    *
    * @param artefact artefact dont on veut le nombre
    * @return la quantité d'artefact
    **/
   public int nbArtefacts(Artefact artefact){return this.artefacts.get(artefact);}
 
-  /**
-   * Renvoie le nombre de cle pour une cle dans l'inventaire
+  /** -- Nombre de clés d'un type récupéré
    *
    * @param artefact artefact dont on veut le nombre de cle
    * @return la quantité de cle
    **/
   public int nbCles(Artefact artefact){return this.cles.get(artefact);}
 
-  /**
-   * Dit si le joueur a un certain artefact dans son inventaire
+  /** -- Indique si le joueur possede un type d'artefact
    *
    * @param artefact artefact dont on veut savoir si on a un
    * @return vrai ou faux
    **/
   public boolean possedeArtefact(Artefact artefact){return this.artefacts.get(artefact) > 0;}
 
+  /** -- Retourne le nombre d'actions restantes pour le joueur
+   *
+   * @return entier nombre d'actions restantes
+   **/
   public int getNbActions(){return this.nbActions;}
 
+  /** -- Retourne la couleur du joueur
+   *
+   * @return couleur du joueur
+   **/
+  public Color couleur(){return this.couleur;}
 
-  /*******************/
-  /**    Setter     **/
-  /*******************/
+  /** -- Indique si le joueur est éliminé
+   *
+   * @return booleen vrai si le joueur est éliminé
+   **/
+  public boolean estElimine(){return this.estElimine;}
 
-  /**
-   * Setter nom
+  /*
+    ===========================================
+    =                SETTER                   =
+    ===========================================
+   */
+
+  /** -- Modifie le nom du joueur
    *
    * @param nom nom du joueur
    **/
   public void setNom(String nom){this.nom = nom;}
 
-  /**
-   * Setter id
+  /** -- Modifie l'identifiant du joueur
    *
    * @param id nom du joueur
    **/
   public void setId(int id){this.id = id;}
 
-  /**
-   * Retire une cle de l'inventaire
+  /** -- Le joueur tilise une clé d'artefact
    *
    * @param art cle de l'artefact a retirer
    **/
-  public void retireCle(Artefact art){this.cles.put(art,this.cles.get(art)-1);}
+  public void perdCle(Artefact art){this.cles.put(art,this.cles.get(art)-1);}
 
-  /**
-   * Ajoute une cle de l'inventaire
+  /**  -- le joueur gagne une clé d'artefact
    *
    * @param art cle de l'artefact a ajouter
    **/
-  public void ajouteCle(Artefact art){this.cles.put(art,this.cles.get(art)+1);}
+  public void gagneCle(Artefact art){this.cles.put(art,this.cles.get(art)+1);}
 
-  /**
-   * Retire un artefact de l'inventaire
+  /** -- Retire un artefact
    *
    * @param art artefact a retirer
    **/
-  public void retireArtefact(Artefact art){this.artefacts.put(art,this.artefacts.get(art)-1);}
+  public void perdArtefact(Artefact art){this.artefacts.put(art,this.artefacts.get(art)-1);}
 
-  /**
-   * Ajoute un artefact de l'inventaire
+  /** -- Ajoute un artefact de l'inventaire
    *
    * @param art artefact a ajouter
    **/
-  public void ajouteArtefact(Artefact art){this.artefacts.put(art,this.artefacts.get(art)+1);}
+  public void gagneArtefact(Artefact art){this.artefacts.put(art,this.artefacts.get(art)+1);}
 
-  /**
-   * Deplace le joueur
+  /** -- Deplace le joueur
    *
    * @param coord destination
    **/
@@ -184,31 +190,31 @@ public class Joueur {
     this.coord.set_y(coord.y());
   }
 
-  /**
-   * Echange une cle avec un artefact
+  /** -- Echange une cle avec un artefact
    *
    * @param artefact artefact a echanger
    **/
-  public void getArtefact(Artefact artefact){
+  public void recupereArtefact(Artefact artefact){
     if (this.nbCles(artefact)>0){
-      this.cles.put(artefact, this.cles.get(artefact)-1);
-      this.artefacts.put(artefact, this.artefacts.get(artefact)+1);
+      this.perdCle(artefact);
+      this.gagneArtefact(artefact);
     }
   }
 
+  /** -- Le joueur effectue une action
+   **/
   public void effectueAction(){ this.nbActions--;}
 
-  /**
-   * Elimine le joueur
+  /** -- Elimine le joueur
+   */
+  public void elimine(){this.estElimine = true;}
+
+  /** -- Modifie le nombre d'actions du joueur
    *
-   * @return*/
-  public void elimine(){this.enJeu = false;}
-
-  public boolean estElimine(){return this.enJeu;}
-
-
+   * @param i le nombre d'actions
+   */
   public void setNbActions(int i) {
-     this.nbActions = i;
+    this.nbActions = i;
   }
 }
   
