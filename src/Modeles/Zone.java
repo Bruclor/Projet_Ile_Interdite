@@ -6,27 +6,33 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Vector;
 
-/**
- * Une zone dans une grille avec des coordonnées
- * La zone peut etre normale, inondée ou submergée
- * La zone peut avoir un artéfact, un heliport ou rien
- **/
-public class Zone extends JPanel implements MouseListener{
+/* =============================================
+ * =                                           =
+ * =              CLASSE ZONE                  =
+ * =                                           =
+ * =============================================
+ */
 
-    /*******************/
-    /**   Attributs   **/
-    /*******************/
+public class Zone extends JPanel implements MouseListener {
 
-    private Coord coord;
-    private Etat etat;
-    private Artefact artefact;
-    private Vector<Integer> idJoueurs;
+    /*
+      ===========================================
+      =                ATTRIBUTS                =
+      ===========================================
+     */
 
-    /*******************/
-    /** Constructeur  **/
-    /*******************/
+    private Coord coord;                                         //Coordonnées de la zone
+    private Etat etat;                                           //Etat de la zone
+    private Artefact artefact;                                   //Artefact présent sur la zone
+    private Vector<Joueur> joueurs;                              //Joueurs présents sur la zone
 
-    /** Constructeurs
+    /*
+      ===========================================
+      =              CONSTRUCTEUR               =
+      ===========================================
+     */
+
+    /** -- Construit une zone du jeu
      *
      * @param x Coordonnée x
      * @param y Coordonnée y
@@ -37,52 +43,53 @@ public class Zone extends JPanel implements MouseListener{
         this.etat = etat;
         this.artefact = artefact;
         this.coord = new Coord(x, y);
-        this.idJoueurs = new Vector<Integer>();
+        this.joueurs = new Vector<Joueur>();
         addMouseListener(this);
     }
 
-    /*******************/
-    /**    Getter     **/
-    /*******************/
+    /*
+      ===========================================
+      =                GETTER                   =
+      ===========================================
+     */
 
-    /**
-     * Getter x
+    /** -- Coordonnée x de la zone
      *
      * @return Coordonnée x
      **/
     public int x(){return this.coord.x();}
 
-    /**
-     * Getter y
+    /** -- Coordonnée y de la zone
      *
      * @return Coordonnée y
      **/
     public int y(){return this.coord.y();}
 
-    /**
-     * Getter coord
+    /** -- Coordonnées de la zone
      *
      * @return Coordonnée
      **/
     public Coord coord(){return this.coord;}
 
-    /**
-     * Getter etat
+    /** -- Etat de la zone
      *
      * @return Etat
      **/
     public Etat etat(){return this.etat;}
 
-    /**
-     * Getter artefact
+    /** -- Artefact de la zone
      *
      * @return Artefact de la zone
      **/
     public Artefact artefact(){return this.artefact;}
-    public Vector<Integer> getIdJoueurs(){return this.idJoueurs;}
 
-    /**
-     * Affiche une zone en chaine de caractere
+    /** -- Joueurs sur la zone
+     *
+     * @return joueurs de la zone
+     **/
+    public Vector<Joueur> getJoueurs(){return this.joueurs;}
+
+    /** -- Affiche une zone en chaine de caractere
      *
      * @return chaine de carctere
      **/
@@ -100,46 +107,62 @@ public class Zone extends JPanel implements MouseListener{
         return res;
     }
 
-    /**
-     * Representation graphique de la zone
+    /** -- Representation graphique de la zone
      *
      * @param g Un graphic
      **/
     public void paintComponent(Graphics g){
         g.setColor(Color.BLUE.darker());
         g.fillRect(0, 0, 99,99);
-        if (this.etat==Etat.Inondee){g.setColor(new Color (100, 120, 240)); g.fillRect(0, 0, 99,99);}
-        else if(this.etat==Etat.Normale){g.setColor(Color.GREEN.darker().darker()); g.fillRect(0, 0, 99,99);}
-        if (this.artefact!=Artefact.Vide) {
-            g.setColor(Color.WHITE);
-            g.fillRect(0, 0, 25, 25);
-            if (this.artefact == Artefact.Air) {
-                g.setColor(Color.GRAY);
-            } else if (this.artefact == Artefact.Eau) {
-                g.setColor(Color.BLUE.brighter());
-            } else if (this.artefact == Artefact.Feu) {
-                g.setColor(Color.RED);
-            } else if (this.artefact == Artefact.Terre) {
-                g.setColor(Color.GREEN);
+        if (this.etat()!=Etat.Submergee) {
+            if (this.etat == Etat.Inondee) {
+                g.setColor(new Color(100, 120, 240));
+                g.fillRect(0, 0, 99, 99);
+            } else if (this.etat == Etat.Normale) {
+                g.setColor(Color.GREEN.darker().darker());
+                g.fillRect(0, 0, 99, 99);
             }
-            g.fillOval(2, 2, 21, 21);
 
-        }
-        for (int id=0; id<this.idJoueurs.size(); id++){
-            if (idJoueurs.get(id) == 0) {g.setColor(Color.RED);}
-            else if (idJoueurs.get(id) == 1) {g.setColor(Color.CYAN);}
-            else if (idJoueurs.get(id) == 2) {g.setColor(Color.YELLOW.darker());}
-            else if (idJoueurs.get(id) == 3) {g.setColor(Color.GREEN.darker());}
-            g.fillOval((id+1)*30, 90-(id+1)*30, 25, 25);
+            if (this.artefact != Artefact.Vide) {
+                if (this.artefact == Artefact.Heliport) {
+                    g.setColor(Color.YELLOW);
+                    g.fillOval(5, 5, 80, 80);
+                    g.setColor(Color.WHITE.darker().darker());
+                    g.fillOval(10, 10, 70, 70);
+                    g.setColor(Color.YELLOW);
+                    g.fillRect(35, 40, 20, 10);
+                    g.fillRect(30, 25, 10, 40);
+                    g.fillRect(50, 25, 10, 40);
+                } else {
+                    g.setColor(Color.WHITE);
+                    g.fillRect(0, 0, 25, 25);
+                    if (this.artefact == Artefact.Air) {
+                        g.setColor(Color.GRAY);
+                    } else if (this.artefact == Artefact.Eau) {
+                        g.setColor(Color.BLUE.brighter());
+                    } else if (this.artefact == Artefact.Feu) {
+                        g.setColor(Color.RED);
+                    } else if (this.artefact == Artefact.Terre) {
+                        g.setColor(Color.GREEN);
+                    }
+                    g.fillOval(2, 2, 21, 21);
+                }
+
+            }
+            for (int id = 0; id < this.joueurs.size(); id++) {
+                g.setColor(joueurs.get(id).couleur());
+                g.fillOval(id * 20 + 5, 85 - (id + 1) * 20, 20, 20);
+            }
         }
     }
 
-    /*******************/
-    /**    Setter     **/
-    /*******************/
+    /*
+      ===========================================
+      =                SETTER                   =
+      ===========================================
+     */
 
-    /**
-     * Place un artefact sur la zone
+    /** -- Place un artefact sur la zone
      *
      * @param artefact un artefact
      **/
@@ -147,38 +170,40 @@ public class Zone extends JPanel implements MouseListener{
         this.artefact = artefact;
     }
 
-    /**
-     * Inonde la zone
+    /** -- Inonde la zone
      **/
     public void inonde(){
         if (this.etat == Etat.Normale) this.etat = Etat.Inondee;
         else if (this.etat == Etat.Inondee) this.etat = Etat.Submergee;
     }
 
-    /**
-     * Asseche la zone
+    /** -- Asseche la zone
      **/
     public void asseche(){
         if (this.etat == Etat.Inondee) this.etat = Etat.Normale;
     }
 
-    /**
-     * ajoute un joueur dans la zone
+    /** -- Ajoute un joueur dans la zone
      *
-     * @param k id du joueur
+     * @param j joueur
      **/
-    public void addJoueur(int k) {
-        this.idJoueurs.add(k);
+    public void addJoueur(Joueur j) {
+        this.joueurs.add(j);
     }
 
-    /**
-     * retire un joueur dans la zone
+    /** -- retire un joueur dans la zone
      *
-     * @param k id du joueur
+     * @param j joueur
      **/
-    public void removeJoueur(int k) {
-        this.idJoueurs.remove(k);
+    public void removeJoueur(Joueur j) {
+        this.joueurs.remove(j);
     }
+
+    /*
+      ===========================================
+      =              IMPLEMENTS                 =
+      ===========================================
+     */
 
     /**
      * affiche les coordonnées de la zone si on clique dessus
