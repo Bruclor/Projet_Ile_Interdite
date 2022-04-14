@@ -1,5 +1,6 @@
 package Controleurs;
 
+import Modeles.Coord;
 import Modeles.Ile;
 import Vue.Fenetre;
 
@@ -38,6 +39,8 @@ public class Controleur implements ActionListener {
             this.ile.InitJoueurs();
             this.ile.InitArtefacts();
             this.ile.InitZoneIG();
+            this.fenetre.initActions();
+            this.fenetre.actualiseInventaire(this.ile);
             this.fenetre.actualise(this.ile);
         } else if (fenetre.bouton(1) == source) { //Parametres
             this.fenetre.setContentPane(fenetre.Parametres());
@@ -65,14 +68,39 @@ public class Controleur implements ActionListener {
             this.fenetre.setContentPane(fenetre.Menu());
         } else if (fenetre.bouton(10) == source) { //Fin de tour
             this.ile.finDeTour();
+            this.fenetre.actualiseInventaire(this.ile);
+            if (ile.GameOver()){
+                System.out.println("Game Over");
+                this.fenetre.GameOver();
+            }
             this.fenetre.actualise(this.ile);
-        } else if (fenetre.bouton(11).equals(source)) { //Chercher une clé
+        } else if (fenetre.bouton(11) == source) { //Chercher une clé
             this.ile.chercheCle();
+            this.fenetre.actualiseInventaire(this.ile);
+            if (ile.GameOver()){
+                System.out.println("Game Over");
+                this.fenetre.GameOver();
+            }
+            this.fenetre.actualise(this.ile);
+        } else if (fenetre.bouton(12) == source){
+            this.ile.deplace(new Coord(-1, 0));
+            this.fenetre.actualiseInventaire(this.ile);
+            this.fenetre.actualise(this.ile);
+        } else if (fenetre.bouton(13) == source){
+            this.ile.deplace(new Coord(1, 0));
+            this.fenetre.actualiseInventaire(this.ile);
+            this.fenetre.actualise(this.ile);
+        } else if (fenetre.bouton(14)==source){
+            this.ile.deplace(new Coord(0, 1));
+            this.fenetre.actualiseInventaire(this.ile);
+            this.fenetre.actualise(this.ile);
+        } else if (fenetre.bouton(15)==source){
+            System.out.println("le bouton gauche est clique");
+            this.ile.deplace(new Coord(0, -1));
+            this.fenetre.actualiseInventaire(this.ile);
             this.fenetre.actualise(this.ile);
         }
-
         this.fenetre.setVisible(true);
-
     }
 
     //Fonction main
