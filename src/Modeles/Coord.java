@@ -61,4 +61,7 @@ public class Coord {
     public void set_x(int x){this.x = x;}
     public void set_y(int y){this.y = y;}
 
+    public boolean equals(Coord other){
+        return (this.x()==other.x() && this.y()==other.y();
+    }
 }
