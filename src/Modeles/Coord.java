@@ -62,6 +62,6 @@ public class Coord {
     public void set_y(int y){this.y = y;}
 
     public boolean equals(Coord other){
-        return (this.x()==other.x() && this.y()==other.y();
+        return (this.x()==other.x() && this.y()==other.y());
     }
 }
