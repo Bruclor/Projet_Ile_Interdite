@@ -68,7 +68,8 @@ Projet LDD2 IM POGL
 
 
 ## Inspiration :
-    (L'interface grpahique a été construite après plusieurs recherches sur Internet (pour comprendre le fonctionnement
+    
+    L'interface grpahique a été construite après plusieurs recherches sur Internet pour comprendre le fonctionnement
 de certains objets swing comme les JPanel et leurs Layout, les JButton pour creer des boutons, les JLabel pour mettre 
 du texte, les ActionListener pour gere des évènements ou encore les Graphics/paintComponent pour dessiner sur un 
 composant). Elle s'inspire en partie aussi des modeles vus en TD.)
