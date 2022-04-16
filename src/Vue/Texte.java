@@ -3,23 +3,39 @@ package Vue;
 import javax.swing.*;
 import java.awt.*;
 
-public class Texte extends JLabel {
 
-    public Texte(String text, Color color){
-        this.setText(text);
-        this.setForeground(color);
-    }
-    public Texte(String text, Color color, Dimension dimension){
-        this.setText(text);
-        this.setForeground(color);
-        this.setPreferredSize(dimension);
+/* =============================================
+ * =                                           =
+ * =             CLASS PANNEAU                 =
+ * =                                           =
+ * =============================================
+ */
+public class Panneau extends JPanel {
+
+    /*
+      ===========================================
+      =              CONSTRUCTEURS              =
+      ===========================================
+     */
+
+    /** -- Construit un panneau avec dimension adaptee
+     *
+     * @param fontColor la couleur de fond
+     */
+    public Panneau(Color fontColor){
+        this.setBackground(fontColor);
+        this.setLayout(new FlowLayout());
     }
 
-    public Texte(String text, Color color, Dimension dimension, int taille){
-        this.setText(text);
-        this.setForeground(color);
+    /** -- Construit un panneau avec dimension personnalisee
+     *
+     * @param fontColor la couleur de fond
+     * @param dimension dimension du panneau
+     */
+    public Panneau(Color fontColor, Dimension dimension){
+        this.setBackground(fontColor);
+        this.setLayout(new FlowLayout());
         this.setPreferredSize(dimension);
-        this.setFont(new Font("Serif", Font.CENTER_BASELINE, taille));
     }
 
 }
