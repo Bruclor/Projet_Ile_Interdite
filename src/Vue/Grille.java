@@ -2,10 +2,21 @@ package Vue;
 import javax.swing.*;
 import java.awt.*;
 
+
+/* =============================================
+ * =                                           =
+ * =              CLASS GRILLE                 =
+ * =                                           =
+ * =============================================
+ */
 public class Grille extends JPanel {
 
-    /**
-     * Constructeur, prend en paramètres les dimensions de la grille.
+    /*
+      ===========================================
+      =              CONSTRUCTEUR               =
+      ===========================================
+     */
+    /** -- Constructeur, prend en paramètres les dimensions de la grille.
      *
      * @param hauteur Nombre de lignes de la grille.
      * @param largeur Nombre de colonnes de la grille.
@@ -14,8 +25,13 @@ public class Grille extends JPanel {
         setLayout(new GridLayout(hauteur, largeur, 5, 5));
     }
 
-    /**
-     * Ajouter un élément dans la grille.
+    /*
+      ===========================================
+      =                 SETTER                  =
+      ===========================================
+     */
+
+    /** -- Ajouter un élément dans la grille.
      *
      * @param element Élément à ajouter.
      */
