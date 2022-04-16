@@ -1,7 +1,6 @@
 package Modeles;
 
-import Vue.*;
-import Controleurs.*;
+import Vue.Grille;
 
 import java.awt.*;
 import java.util.Dictionary;
@@ -25,14 +24,18 @@ public class Ile extends Grille {
       ===========================================
      */
 
-    private int taille;                                                                        //Taille de la grille
+    private static int taille = 6;                                                             //Taille de la grille
     private Zone[][] grille;                                                                   //Grille de jeu
     private Joueur[] joueurs;                                                                  //Liste des joueurs
     private int nbArtefacts;                                                                   //Nombre d'artefacts
     private int nbJoueurs;                                                                     //Nombre de joueurs
     private int idJoueurEnJeu;                                                                 //id du joueur en jeu
-    private Dictionary<Artefact, Boolean> artefactsRecuperes = new Hashtable(4);    //Artefacts de l'équipe
+    private Dictionary<Artefact, Integer> artefactsAccessibles = new Hashtable(4);  //nb artefacts disponibles
+    private Dictionary<Artefact, Boolean> artefactsRecuperes = new Hashtable(4);    //artefacts de l'équipe
     private ChangeParametre param = ChangeParametre.Joueurs;                                   //Le parametre modifié
+    private boolean gameOver;                                                                  //Defaite de la partie
+    private String infoGameOver;                                                               //Raison de la defaite
+    private boolean isWin;                                                                     //Victoire de la partie
 
     /*
       ===========================================
@@ -41,16 +44,16 @@ public class Ile extends Grille {
      */
 
     /** -- Construit l'ile du jeu
-     * @param taille taille de l'ile
      * @param nbJoueurs nombre de joueurs
      * @param nbArtefacts nombre d'artefacts de chaque type
      **/
-    public Ile(int taille, int nbJoueurs, int nbArtefacts) {
+    public Ile(int nbJoueurs, int nbArtefacts) {
         super(taille, taille);
         this.nbJoueurs = nbJoueurs;
         this.nbArtefacts = nbArtefacts;
         this.taille = taille;
         this.grille = new Zone[this.taille][this.taille];
+        this.gameOver = false;
         for (int x = 0; x < this.taille; x++) {
             for (int y = 0; y < this.taille; y++) {
                 if (x == 0 || x == this.taille - 1) {
@@ -73,7 +76,6 @@ public class Ile extends Grille {
                 }
             }
         }
-
     }
 
     /*
@@ -81,24 +83,6 @@ public class Ile extends Grille {
       =                GETTER                   =
       ===========================================
      */
-
-
-    /** --Retourne la taille de la grille
-     *
-     * @return la taille de l'ile
-     **/
-    public int taille() {
-        return this.taille;
-    }
-
-
-    /** --Retourne la grille du jeu
-     *
-     * @return la grille de l'ile
-     **/
-    public Zone[][] grille() {
-        return this.grille;
-    }
 
 
     /** --Retourne le nombre de joueurs
@@ -114,14 +98,6 @@ public class Ile extends Grille {
      */
     public int getNbArtefacts(){return this.nbArtefacts;}
 
-
-    /** -- Retourne la liste des joueurs
-     *
-     * @return tableau des joueurs
-     **/
-    public Joueur[] getJoueurs() {
-        return joueurs;
-    }
 
     /** -- Retourne le joueur d'identifiant k
      *
@@ -152,33 +128,17 @@ public class Ile extends Grille {
     public Zone zone(int x, int y) {
         return grille[x][y];
     }
-
+    /** -- Retourne la zone de coord (x, y) dans la grille
+     *
+     * @param coord coordonnées
+     *
+     * @return zone de coord (x, y)
+     **/
     public Zone zone(Coord coord){
         return grille[coord.x()][coord.y()];
     }
 
-    /** -- Retourne le vecteur des zones adjacentes d'une zone
-     *
-     * @param coord la zone dont on veut connaitre les voisins
-     *
-     * @return vecteur des zones autour de la zone
-     **/
-    public Vector<Coord> adjacents(Coord coord) {
-        Vector<Coord> adj = new Vector<Coord>();
-        if (coord.x() < this.taille - 1) {
-            adj.add(new Coord(coord.x() + 1, coord.y()));
-        }
-        if (coord.x() > 0) {
-            adj.add(new Coord(coord.x() - 1, coord.y()));
-        }
-        if (coord.y() < this.taille - 1) {
-            adj.add(new Coord(coord.x(), coord.y() + 1));
-        }
-        if (coord.y() > 0) {
-            adj.add(new Coord(coord.x(), coord.y() - 1));
-        }
-        return adj;
-    }
+
 
     /** -- Retourne un vecteur des zones non submergées
      *
@@ -196,17 +156,8 @@ public class Ile extends Grille {
         return dispo;
     }
 
-    /** -- Indique si l'artefact a a été recupere
-     *
-     * @param a un artefact
-     *
-     * @return booleen vrai si l'artefact a été recupere
-     **/
-    public boolean possedeArtefact(Artefact a){
-        return artefactsRecuperes.get(a);
-    }
 
-    /** -- Retourne quatre booleen indiquant quels artefacts sont recuperes
+    /** --Indique quels artefacts sont recuperes
      *
      * @return Dict<Artefact, booleen>
      **/
@@ -215,26 +166,29 @@ public class Ile extends Grille {
     /** -- Indique le type de parametrage effectué
      *
      * @param p le type de parametrage
+     *
+     * @return le idctionnaire des artefacts recuperes
      */
     public void parametrage(ChangeParametre p){this.param = p;}
 
 
     /** -- Indique si l'équipe a perdu
      *
-     * @return booleen vrai s'il y a une défaite
+     * @return booleen vrai si la partie est perdue
      **/
-    public boolean GameOver(){
-        /* Améliorer la fonction en testant :
-         * - Si un artefact non recupéré n'est plus accesible -> game over
-         * - Si l'héliport est inaccessible -> game over
-         */
-        for (int k=0; k<this.joueurs.length; k++){
-            if (! joueurs[k].estElimine()){
-                return false;
-            }
-        }
-        return true;
-    }
+    public boolean GameOver(){return this.gameOver;}
+
+    /** -- Retourne le message de fin de partie (defaite)
+     *
+     * @return string message de defaite
+     */
+    public String infoGameOver() {return this.infoGameOver;}
+
+    /** -- Indique si l'équipe a gagné
+     *
+     * @return booleen vrai si la partie est gagnée
+     */
+    public boolean IsWin(){return this.isWin;}
 
     /*
       ===========================================
@@ -242,9 +196,7 @@ public class Ile extends Grille {
       ===========================================
      */
 
-    /**
-     * -- Methode initialisation des joueurs de l'ile
-     *
+    /** -- Methode initialisation des joueurs de l'ile
      **/
     public void InitJoueurs() {
         this.joueurs = new Joueur[nbJoueurs];
@@ -281,18 +233,12 @@ public class Ile extends Grille {
             alea = random.nextInt(dispo.size());
             dispo.get(alea).setArtefact(Artefact.Air);
             dispo.remove(alea);
-        }
-        for (int k = 0; k < nbArtefacts; k++) {
             alea = random.nextInt(dispo.size());
             dispo.get(alea).setArtefact(Artefact.Feu);
             dispo.remove(alea);
-        }
-        for (int k = 0; k < nbArtefacts; k++) {
             alea = random.nextInt(dispo.size());
             dispo.get(alea).setArtefact(Artefact.Terre);
             dispo.remove(alea);
-        }
-        for (int k = 0; k < nbArtefacts; k++) {
             alea = random.nextInt(dispo.size());
             dispo.get(alea).setArtefact(Artefact.Eau);
             dispo.remove(alea);
@@ -301,6 +247,10 @@ public class Ile extends Grille {
         this.artefactsRecuperes.put(Artefact.Eau, false);
         this.artefactsRecuperes.put(Artefact.Feu, false);
         this.artefactsRecuperes.put(Artefact.Terre, false);
+        this.artefactsAccessibles.put(Artefact.Air, this.nbArtefacts);
+        this.artefactsAccessibles.put(Artefact.Eau, this.nbArtefacts);
+        this.artefactsAccessibles.put(Artefact.Feu, this.nbArtefacts);
+        this.artefactsAccessibles.put(Artefact.Terre, this.nbArtefacts);
 
     }
 
@@ -309,18 +259,10 @@ public class Ile extends Grille {
     public void InitZoneIG(){
         for (int x=0; x<this.taille; x++){
             for (int y=0; y<this.taille; y++){
-                this.add(this.zone(x, y));
+                this.ajouteElement(this.zone(x, y));
             }
         }
 
-    }
-
-    /** -- Modifie le nombre d'artefacts de l'ile
-     **/
-    public void setNbArtefacts(int n) {
-        if (n > 0 && n < 5) {
-            nbArtefacts = n;
-        }
     }
 
     /** -- Deplace le joueur en jeu vers une zone de destination
@@ -328,21 +270,17 @@ public class Ile extends Grille {
      * @param vectDirection le vecteur direction de déplacement
      **/
     public void deplace(Coord vectDirection) {
-        Joueur j = joueurs[idJoueurEnJeu];
+        Joueur j = this.joueurEnJeu();
         Coord dest = new Coord(j.x() + vectDirection.x(), j.y()+ vectDirection.y());
-        Vector<Coord> adjacents = adjacents(j.coord());
-        System.out.println("Joueur en ("+ j.x() + ", "+ j.y()+") veut aller en ("+ dest.x() + "," + dest.y() + ")");
-        //if (zone(dest).etat() == Etat.Submergee){System.out.println("Mais la zone est submergee !");}
+        Vector<Coord> adjacents = j.coord().adjacents(0, this.taille);
         for (int k = 0; k<adjacents.size(); k++){
-            System.out.println(adjacents.get(k).x() + " " + adjacents.get(k).y());
             if (adjacents.get(k).equals(dest)){
-                System.out.println("coord trouvee");
                 if (zone(dest).etat() != Etat.Submergee && j.getNbActions() > 0) {
-                    System.out.println("Un joueur se deplace");
                     zone(j.x(), j.y()).removeJoueur(j);
                     j.deplace(dest);
                     zone(dest).addJoueur(j);
                     j.effectueAction();
+                    this.checkWin();
                     break;
                 }
             }
@@ -352,37 +290,53 @@ public class Ile extends Grille {
 
     /** -- Un joueur asseche une zone
      *
-     * @param zone zone a assecher
+     * @param vectDirection vecteurDirection de la zone a assecher
      **/
-    public void asseche(Zone zone) {
-        Joueur j = joueurs[idJoueurEnJeu];
-        Vector<Coord> adjacents = this.adjacents(new Coord (j.x(), j.y()));
-        if ((adjacents.contains(zone) || (j.x() == zone.x() && j.y() == zone.y())) && zone.etat() == Etat.Inondee && j.getNbActions() > 0) {
-            zone.asseche();
-            j.effectueAction();
+    public void asseche(Coord vectDirection) {
+        Joueur j = this.joueurEnJeu();
+        Coord dest = new Coord(j.x() + vectDirection.x(), j.y()+ vectDirection.y());
+        Vector<Coord> adjacents = j.coord().adjacents(0, this.taille);
+        adjacents.add(j.coord());
+        for (int k = 0; k<adjacents.size(); k++) {
+            if (adjacents.get(k).equals(dest)) {
+                Zone zone = zone(dest);
+                if (zone.etat() == Etat.Inondee && j.getNbActions() > 0) {
+                    zone.asseche();
+                    j.effectueAction();
+                    break;
+                }
+            }
         }
     }
 
     /** -- Un joueur cherche une clé
      **/
     public void chercheCle() {
-        Joueur j  = joueurs[idJoueurEnJeu];
-        if (j.getNbActions() > 0) {
-            Random random = new Random();
-            int r = random.nextInt(6);
-            if (r == 0) j.gagneCle(Artefact.Air);
-            if (r == 1) j.gagneCle(Artefact.Eau);
-            if (r == 2) j.gagneCle(Artefact.Feu);
-            if (r == 3) j.gagneCle(Artefact.Terre);
-            if (r == 4 || r == 5) {
-                grille[j.x()][j.y()].inonde();
-                if (grille[j.x()][j.y()].etat() == Etat.Submergee){
-                    j.elimine();
-                    grille[j.x()][j.y()].removeJoueur(j);
-                }
+        Joueur j  = this.joueurEnJeu();
+        Random random = new Random();
+        int r = random.nextInt(5);
+        if (r == 0) j.gagneCle(Artefact.Air);
+        if (r == 1) j.gagneCle(Artefact.Eau);
+        if (r == 2) j.gagneCle(Artefact.Feu);
+        if (r == 3) j.gagneCle(Artefact.Terre);
+    }
+
+    /** -- Un joueur se deplace sur une case adjacente disponible
+     **/
+    private void seRattrape(Joueur j) {
+        Coord pos = j.coord();
+        Vector<Coord> adjacents = pos.adjacents(0, this.taille);
+        for (int k=0; k<adjacents.size(); k++) {
+            if (!(zone(adjacents.get(k)).etat() == Etat.Submergee)) {
+                zone(pos).removeJoueur(j);
+                j.deplace(adjacents.get(k));
+                zone(adjacents.get(k)).addJoueur(j);
+                this.checkWin();
+                return;
             }
-            j.effectueAction();
         }
+        zone(j.coord()).removeJoueur(j);
+        this.setGameOver("Un joueur s'est noyé !");
     }
 
     /** -- Inonde trois cases differentes et termine le tour
@@ -395,16 +349,26 @@ public class Ile extends Grille {
         while (dispo.size() > 0 && nb < 3) {
             nb++;
             alea = random.nextInt(dispo.size());
-            dispo.get(alea).inonde();
+            Zone zoneAlea = dispo.get(alea);
+            zoneAlea.inonde();
+            Artefact a = zoneAlea.artefact();
+            if (zoneAlea.etat() == Etat.Submergee && a != Artefact.Vide) {
+                if (a == Artefact.Heliport) {
+                    this.setGameOver("L'heliport a été submergé !");
+                } else {
+                    int nbArtDispo = this.artefactsAccessibles.get(a);
+                    this.artefactsAccessibles.put(a, nbArtDispo-1);
+                    if ((!this.getArtefactsRecuperes().get(zoneAlea.artefact())) && this.artefactsAccessibles.get(a)==0) {
+                        this.setGameOver("Un artefact a été perdu !");
+                    }
+                }
+            }
             dispo.remove(alea);
         }
         for (int k=0; k<joueurs.length; k++) {
             Joueur j = joueurs[k];
-            if ((!j.estElimine()) && grille[j.x()][j.y()].etat() == Etat.Submergee) {
-
-                System.out.println(j.nom()+" est elimine");
-                j.elimine();
-                grille[j.x()][j.y()].removeJoueur(j);
+            if (zone(j.coord()).etat() == Etat.Submergee) {
+                this.seRattrape(j);
             }
         }
         this.joueurSuivant();
@@ -415,29 +379,56 @@ public class Ile extends Grille {
      **/
     public void joueurSuivant() {
         int nb = this.nbJoueurs;
-        int iter = 0;
-        do {
-            iter++;
-            if (this.idJoueurEnJeu == nb-1){
-                this.idJoueurEnJeu = 0;
-            } else {
-                this.idJoueurEnJeu++;
-            }
-        } while (joueurs[idJoueurEnJeu].estElimine() && iter <= nb);
-        joueurs[idJoueurEnJeu].setNbActions(3);
+        if (this.idJoueurEnJeu == nb-1){
+            this.idJoueurEnJeu = 0;
+        } else {
+            this.idJoueurEnJeu++;
+        }
+        this.joueurEnJeu().setNbActions(3);
 
     }
 
-    /** -- L'équipe recupere l'artefact a
+    /** -- Rend la partie perdue
+     * @param texte la raison de la défaite
      *
-     * @param a l'artefact recupere
      **/
-    public void artefactRecupere(Artefact a){
-        this.artefactsRecuperes.put(a, true);
+    public void setGameOver(String texte){
+        this.gameOver = true;
+        this.infoGameOver = texte;
     }
 
-    /**
-     * Modifie la valeur du parametre concerné
+    /** -- Vérifie les conditions de victoire de la partie
+     **/
+    public void checkWin(){
+        Dictionary<Artefact, Boolean> artefacts = this.getArtefactsRecuperes();
+        if ( artefacts.get(Artefact.Air) && artefacts.get(Artefact.Feu) && artefacts.get(Artefact.Eau) && artefacts.get(Artefact.Terre)){
+            for (int j=0; j<this.getNbJoueurs(); j++){
+                Joueur joueur = this.getJoueur(j);
+                if (zone(joueur.x(), joueur.y()).artefact() != Artefact.Heliport) {
+                    this.isWin = false;
+                }
+            }
+            this.isWin = true;
+        } else {
+            this.isWin = false;
+        }
+    }
+
+    /** -- Le joueur en jeu recupere l'artefact pour l'équipe
+     **/
+    public void artefactRecupere(){
+        Joueur j = this.joueurEnJeu();
+        Artefact artZone = this.zone(j.coord()).artefact();
+        if (artZone != Artefact.Heliport && artZone != Artefact.Vide){
+            if (j.nbCles(artZone) > 0 && j.getNbActions()>0){
+                j.recupereArtefact(artZone);
+                this.artefactsRecuperes.put(artZone, true);
+                j.effectueAction();
+            }
+        }
+    }
+
+    /** -- Modifie la valeur du parametre concerné
      *
      * @param n entier
      */
@@ -454,4 +445,6 @@ public class Ile extends Grille {
                 break;
         }
     }
+
+
 }
