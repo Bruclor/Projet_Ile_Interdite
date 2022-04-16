@@ -87,37 +87,35 @@ public class Fenetre extends JFrame {
      */
     public Panneau  Nombres(){return this.nombres;}
 
-    /** -- Acces aux actions
+    /** -- Acces aux valeurs
      *
-     * @return le panneau des actions
+     * @return le panneau des valeurs
      */
     public Panneau  Actions(){return this.actions;}
 
-    /** -- Acces à l'inventaire
+    /** -- Acces aux valeurs
      *
-     * @return le panneau des informations
+     * @return le panneau des actions
      */
     public Panneau  Informations(){return this.informations;}
 
-    /** -- Acces au jeu
+    /** -- Acces aux valeurs
      *
-     * @return le panneau de jeu
+     * @return le panneau des informations/inventaire
      */
     public Grille Jeu(){return this.jeu;}
 
-    
+    /** -- Acces à la grille de jeu
+     *
+     * @return la grille de jeu
+     **/
+    public void addBouton(Bouton b){this.boutons.add(b);}
 
     /*
       ===========================================
       =                 SETTER                  =
       ===========================================
      */
-     
-     /** -- Ajoute un bouton
-     *
-     * @param b un bouton
-     **/
-    public void addBouton(Bouton b){this.boutons.add(b);}
 
     /** -- Initialise tous les boutons
      **/
@@ -242,22 +240,22 @@ public class Fenetre extends JFrame {
 
         //Affichage des artefacts recupérés par l'équipe
         Dictionary<Artefact, Boolean> artefacts = ile.getArtefactsRecuperes();
-        newInventaire.add(new Texte(" Artefacts recupérés : ", Color.WHITE, new Dimension(199, 30), 20));
+        newInventaire.add(new Texte(" Artefacts recupérés : ", Color.WHITE, new Dimension(199, 20), 20));
         if (artefacts.get(Artefact.Air)){newInventaire.add(new JLabel(new ImageIcon("src/Images/air.png")));}
         if (artefacts.get(Artefact.Eau)){newInventaire.add(new JLabel(new ImageIcon("src/Images/eau.png")));}
         if (artefacts.get(Artefact.Feu)){newInventaire.add(new JLabel(new ImageIcon("src/Images/feu.png")));}
         if (artefacts.get(Artefact.Terre)){newInventaire.add(new JLabel(new ImageIcon("src/Images/terre.png")));}
 
         //Affichage de joueur en jeu
-        newInventaire.add(new Texte (" Tour du joueur : ", Color.WHITE, new Dimension(160, 30), 20));
-        newInventaire.add(new Texte (ile.joueurEnJeu().nom(), ile.joueurEnJeu().couleur(), new Dimension(30, 30), 20));
+        newInventaire.add(new Texte (" Tour du joueur : ", Color.WHITE, new Dimension(199, 20), 20));
+        newInventaire.add(new Texte (ile.joueurEnJeu().nom(), ile.joueurEnJeu().couleur(), new Dimension(30, 20), 20));
 
         //Affichage du nombre d'actions restantes
-        newInventaire.add(new Texte (" Actions restantes : "+ile.joueurEnJeu().getNbActions(), Color.WHITE, new Dimension(199, 30), 20));
+        newInventaire.add(new Texte (" Actions restantes : "+ile.joueurEnJeu().getNbActions(), Color.WHITE, new Dimension(199, 20), 20));
 
         //Affichage des clés récupérées par chaque joueur
         for (int k=0; k<ile.getNbJoueurs(); k++) {
-            newInventaire.add(new Texte(" Clés du joueur " + ile.getJoueur(k).nom() + " :", ile.getJoueur(k).couleur(), new Dimension(199, 30), 15));
+            newInventaire.add(new Texte(" Clés du joueur " + ile.getJoueur(k).nom() + " :", ile.getJoueur(k).couleur(), new Dimension(199, 20), 15));
             newInventaire.add(new Texte("Air : " + ile.getJoueur(k).nbCles(Artefact.Air), Color.WHITE, new Dimension(199, 10)));
             newInventaire.add(new Texte("Eau : " + ile.getJoueur(k).nbCles(Artefact.Eau), Color.WHITE, new Dimension(199, 10)));
             newInventaire.add(new Texte("Feu : " + ile.getJoueur(k).nbCles(Artefact.Feu), Color.WHITE, new Dimension(199, 10)));
