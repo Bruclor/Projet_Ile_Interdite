@@ -406,6 +406,7 @@ public class Ile extends Grille {
                 Joueur joueur = this.getJoueur(j);
                 if (zone(joueur.x(), joueur.y()).artefact() != Artefact.Heliport) {
                     this.isWin = false;
+                    return;
                 }
             }
             this.isWin = true;
