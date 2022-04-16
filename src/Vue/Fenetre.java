@@ -87,35 +87,37 @@ public class Fenetre extends JFrame {
      */
     public Panneau  Nombres(){return this.nombres;}
 
-    /** -- Acces aux valeurs
-     *
-     * @return le panneau des valeurs
-     */
-    public Panneau  Actions(){return this.actions;}
-
-    /** -- Acces aux valeurs
+    /** -- Acces aux actions
      *
      * @return le panneau des actions
      */
+    public Panneau  Actions(){return this.actions;}
+
+    /** -- Acces à l'inventaire
+     *
+     * @return le panneau des informations
+     */
     public Panneau  Informations(){return this.informations;}
 
-    /** -- Acces aux valeurs
+    /** -- Acces au jeu
      *
-     * @return le panneau des informations/inventaire
+     * @return le panneau de jeu
      */
     public Grille Jeu(){return this.jeu;}
 
-    /** -- Acces à la grille de jeu
-     *
-     * @return la grille de jeu
-     **/
-    public void addBouton(Bouton b){this.boutons.add(b);}
+    
 
     /*
       ===========================================
       =                 SETTER                  =
       ===========================================
      */
+     
+     /** -- Ajoute un bouton
+     *
+     * @param b un bouton
+     **/
+    public void addBouton(Bouton b){this.boutons.add(b);}
 
     /** -- Initialise tous les boutons
      **/
