@@ -2,8 +2,6 @@ package Modeles;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Vector;
 
 /* =============================================
@@ -13,7 +11,7 @@ import java.util.Vector;
  * =============================================
  */
 
-public class Zone extends JPanel implements MouseListener {
+public class Zone extends JPanel {
 
     /*
       ===========================================
@@ -44,7 +42,6 @@ public class Zone extends JPanel implements MouseListener {
         this.artefact = artefact;
         this.coord = new Coord(x, y);
         this.joueurs = new Vector<Joueur>();
-        addMouseListener(this);
     }
 
     /*
@@ -133,19 +130,6 @@ public class Zone extends JPanel implements MouseListener {
                     g.fillRect(35, 40, 20, 10);
                     g.fillRect(30, 25, 10, 40);
                     g.fillRect(50, 25, 10, 40);
-                } else {
-                    g.setColor(Color.WHITE);
-                    g.fillRect(0, 0, 25, 25);
-                    if (this.artefact == Artefact.Air) {
-                        g.setColor(Color.GRAY);
-                    } else if (this.artefact == Artefact.Eau) {
-                        g.setColor(Color.BLUE.brighter());
-                    } else if (this.artefact == Artefact.Feu) {
-                        g.setColor(Color.RED);
-                    } else if (this.artefact == Artefact.Terre) {
-                        g.setColor(Color.GREEN);
-                    }
-                    g.fillOval(2, 2, 21, 21);
                 }
 
             }
@@ -162,12 +146,36 @@ public class Zone extends JPanel implements MouseListener {
       ===========================================
      */
 
-    /** -- Place un artefact sur la zone
+    /** -- Place un artefact sur une zone vide
      *
      * @param artefact un artefact
      **/
     public void setArtefact(Artefact artefact) {
-        this.artefact = artefact;
+        if (this.artefact() == Artefact.Vide) {
+            this.artefact = artefact;
+            this.setLayout(new FlowLayout(FlowLayout.LEFT));
+            if (this.artefact == Artefact.Air) {
+                Icon icon = new ImageIcon("src/Images/air.png");
+                JLabel air = new JLabel();
+                air.setIcon(icon);
+                this.add(air);
+            } else if (this.artefact == Artefact.Eau) {
+                Icon icon = new ImageIcon("src/Images/eau.png");
+                JLabel eau = new JLabel();
+                eau.setIcon(icon);
+                this.add(eau);
+            } else if (this.artefact == Artefact.Feu) {
+                Icon icon = new ImageIcon("src/Images/feu.png");
+                JLabel feu = new JLabel();
+                feu.setIcon(icon);
+                this.add(feu);
+            } else if (this.artefact == Artefact.Terre) {
+                Icon icon = new ImageIcon("src/Images/terre.png");
+                JLabel terre = new JLabel();
+                terre.setIcon(icon);
+                this.add(terre);
+            }
+        }
     }
 
     /** -- Inonde la zone
@@ -198,27 +206,5 @@ public class Zone extends JPanel implements MouseListener {
     public void removeJoueur(Joueur j) {
         this.joueurs.remove(j);
     }
-
-    /*
-      ===========================================
-      =              IMPLEMENTS                 =
-      ===========================================
-     */
-
-    /**
-     * affiche les coordonnées de la zone si on clique dessus
-     *
-     * @param e evenement
-     **/
-    public void mouseClicked(MouseEvent e) {
-        System.out.print(this.x());
-        System.out.println(this.y());
-    }
-
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
-
 
 }
