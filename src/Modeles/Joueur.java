@@ -23,12 +23,8 @@ public class Joueur {
   private String nom;                                                                //Nom
   private Color couleur;                                                             //Couleur
   private Coord coord;                                                               //Coordonnées
-
-  private boolean estElimine;                                                        //Statut du joueur
   private int nbActions;                                                             //Actions restantes
-
   private Dictionary<Artefact, Integer> cles = new Hashtable<Artefact, Integer>(4);       //Nombre de clés
-  private Dictionary<Artefact, Integer> artefacts = new Hashtable<Artefact, Integer>(4);  //Nombre d'artefacts
 
   /*
     ===========================================
@@ -47,7 +43,6 @@ public class Joueur {
 
 
     this.coord = coord;
-    this.estElimine = false;
     this.id = id;
     this.nom = nom;
     this.couleur = couleur;
@@ -57,10 +52,6 @@ public class Joueur {
     this.cles.put(Artefact.Eau, 0);
     this.cles.put(Artefact.Terre, 0);
 
-    this.artefacts.put(Artefact.Air, 0);
-    this.artefacts.put(Artefact.Feu, 0);
-    this.artefacts.put(Artefact.Eau, 0);
-    this.artefacts.put(Artefact.Terre, 0);
   }
 
   /*
@@ -100,13 +91,6 @@ public class Joueur {
    **/
   public int y(){return this.coord.y();}
 
-  /** -- Nombre d'artefacts d'un type récupérés
-   *
-   * @param artefact artefact dont on veut le nombre
-   * @return la quantité d'artefact
-   **/
-  public int nbArtefacts(Artefact artefact){return this.artefacts.get(artefact);}
-
   /** -- Nombre de clés d'un type récupéré
    *
    * @param artefact artefact dont on veut le nombre de cle
@@ -114,12 +98,6 @@ public class Joueur {
    **/
   public int nbCles(Artefact artefact){return this.cles.get(artefact);}
 
-  /** -- Indique si le joueur possede un type d'artefact
-   *
-   * @param artefact artefact dont on veut savoir si on a un
-   * @return vrai ou faux
-   **/
-  public boolean possedeArtefact(Artefact artefact){return this.artefacts.get(artefact) > 0;}
 
   /** -- Retourne le nombre d'actions restantes pour le joueur
    *
@@ -133,11 +111,6 @@ public class Joueur {
    **/
   public Color couleur(){return this.couleur;}
 
-  /** -- Indique si le joueur est éliminé
-   *
-   * @return booleen vrai si le joueur est éliminé
-   **/
-  public boolean estElimine(){return this.estElimine;}
 
   /*
     ===========================================
@@ -169,17 +142,6 @@ public class Joueur {
    **/
   public void gagneCle(Artefact art){this.cles.put(art,this.cles.get(art)+1);}
 
-  /** -- Retire un artefact
-   *
-   * @param art artefact a retirer
-   **/
-  public void perdArtefact(Artefact art){this.artefacts.put(art,this.artefacts.get(art)-1);}
-
-  /** -- Ajoute un artefact de l'inventaire
-   *
-   * @param art artefact a ajouter
-   **/
-  public void gagneArtefact(Artefact art){this.artefacts.put(art,this.artefacts.get(art)+1);}
 
   /** -- Deplace le joueur
    *
@@ -195,19 +157,12 @@ public class Joueur {
    * @param artefact artefact a echanger
    **/
   public void recupereArtefact(Artefact artefact){
-    if (this.nbCles(artefact)>0){
       this.perdCle(artefact);
-      this.gagneArtefact(artefact);
-    }
   }
 
   /** -- Le joueur effectue une action
    **/
   public void effectueAction(){ this.nbActions--;}
-
-  /** -- Elimine le joueur
-   */
-  public void elimine(){this.estElimine = true;}
 
   /** -- Modifie le nombre d'actions du joueur
    *
@@ -216,5 +171,6 @@ public class Joueur {
   public void setNbActions(int i) {
     this.nbActions = i;
   }
+
 }
   
