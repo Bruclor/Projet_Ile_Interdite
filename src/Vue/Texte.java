@@ -6,11 +6,11 @@ import java.awt.*;
 
 /* =============================================
  * =                                           =
- * =             CLASS PANNEAU                 =
+ * =              CLASS TEXTE                  =
  * =                                           =
  * =============================================
  */
-public class Panneau extends JPanel {
+public class Texte extends JLabel {
 
     /*
       ===========================================
@@ -18,24 +18,40 @@ public class Panneau extends JPanel {
       ===========================================
      */
 
-    /** -- Construit un panneau avec dimension adaptee
+    /** -- Construit un texte avec dimension adaptee
      *
-     * @param fontColor la couleur de fond
+     * @param text le texte a afficher
+     * @param color la couleur du texte
      */
-    public Panneau(Color fontColor){
-        this.setBackground(fontColor);
-        this.setLayout(new FlowLayout());
+    public Texte(String text, Color color){
+        this.setText(text);
+        this.setForeground(color);
     }
 
-    /** -- Construit un panneau avec dimension personnalisee
+    /** -- Construit un texte avec dimension personnalisee
      *
-     * @param fontColor la couleur de fond
-     * @param dimension dimension du panneau
+     * @param text le texte a afficher
+     * @param color la couleur du texte
+     * @param dimension dimension de la zone de texte
      */
-    public Panneau(Color fontColor, Dimension dimension){
-        this.setBackground(fontColor);
-        this.setLayout(new FlowLayout());
+    public Texte(String text, Color color, Dimension dimension){
+        this.setText(text);
+        this.setForeground(color);
         this.setPreferredSize(dimension);
+    }
+
+    /** -- Construit un texte plus complexe avec :
+     *
+     * @param text le texte a afficher
+     * @param color la couleur du texte
+     * @param dimension dimension de la zone de texte
+     * @param taille taille du texte
+     */
+    public Texte(String text, Color color, Dimension dimension, int taille){
+        this.setText(text);
+        this.setForeground(color);
+        this.setPreferredSize(dimension);
+        this.setFont(new Font("Serif", Font.CENTER_BASELINE, taille));
     }
 
 }
