@@ -289,6 +289,14 @@ public class Ile extends Grille {
 
     }
 
+    /** -- Ajoute un artefact a l'inventaire
+     *
+     * @param art Artefact a ajouter
+     **/
+    public void ajouteArtefact(Artefact art) {
+        this.artefactsRecuperes.put(art,true);
+    }
+
     /** -- Deplace le joueur en jeu vers une zone de destination
      *
      * @param vectDirection le vecteur direction de déplacement

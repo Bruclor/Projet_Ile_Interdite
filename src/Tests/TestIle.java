@@ -126,5 +126,92 @@ public class TestIle {
         assertEquals(i.zone(2,1).etat(),Etat.Normale);
         assertEquals(i.getJoueur(0).getNbActions(),2);
     }
+
+    @Test
+    public void testJoueurSuivant(){
+        int nbJ = 2;
+        int nbA = 4;
+        Ile i = new Ile(nbJ, nbA);
+        i.InitJoueurs();
+        i.InitArtefacts();
+        i.joueurSuivant();
+        assertEquals(i.joueurEnJeu().id(),1);
+        assertEquals(i.getJoueur(1).getNbActions(),3);
+        i.joueurSuivant();
+        assertEquals(i.joueurEnJeu().id(),0);
+    }
+
+    @Test
+    public void testGameOver(){
+        int nbJ = 2;
+        int nbA = 4;
+        Ile i = new Ile(nbJ, nbA);
+        i.setGameOver("Test");
+        assertTrue(i.GameOver());
+        assertEquals(i.infoGameOver(),"Test");
+    }
+
+    @Test
+    public void testAjouteArtefact(){
+        int nbJ = 2;
+        int nbA = 4;
+        Ile i = new Ile(nbJ, nbA);
+        i.ajouteArtefact(Artefact.Feu);
+        i.ajouteArtefact(Artefact.Air);
+        i.ajouteArtefact(Artefact.Terre);
+        i.ajouteArtefact(Artefact.Eau);
+        assertTrue(i.getArtefactsRecuperes().get(Artefact.Air));
+        assertTrue(i.getArtefactsRecuperes().get(Artefact.Feu));
+        assertTrue(i.getArtefactsRecuperes().get(Artefact.Terre));
+        assertTrue(i.getArtefactsRecuperes().get(Artefact.Eau));
+    }
+
+    @Test
+    public void testCheckWin(){
+        int nbJ = 2;
+        int nbA = 2;
+        Ile i = new Ile(nbJ, nbA);
+        i.InitJoueurs();
+        i.InitArtefacts();
+
+        i.checkWin();
+        assertFalse(i.IsWin());
+
+        i.ajouteArtefact(Artefact.Feu);
+        i.ajouteArtefact(Artefact.Air);
+        i.ajouteArtefact(Artefact.Terre);
+        i.ajouteArtefact(Artefact.Eau);
+        i.checkWin();
+        assertFalse(i.IsWin());
+
+        Vector<Zone> zd = i.getZonesDispo();
+        int x = zd.get(0).x();
+        int y = zd.get(0).x();
+        i.zone(x,y).setArtefact(Artefact.Heliport);
+        i.getJoueur(0).deplace(new Coord(x,y));
+        i.getJoueur(1).deplace(new Coord(x,y));
+        i.checkWin();
+        assertTrue(i.IsWin());
+    }
+
+    @Test
+    public void testArtefactRecupere(){
+        int nbJ = 2;
+        int nbA = 4;
+        Ile i = new Ile(nbJ, nbA);
+        i.InitJoueurs();
+        i.InitArtefacts();
+        Vector<Zone> zd = i.getZonesDispo();
+        int x = zd.get(0).x();
+        int y = zd.get(0).x();
+        i.zone(x,y).setArtefact(Artefact.Feu);
+        i.getJoueur(0).deplace(new Coord(x,y));
+        i.getJoueur(0).gagneCle(Artefact.Feu);
+        i.artefactRecupere();
+        assertTrue(i.getArtefactsRecuperes().get(Artefact.Feu));
+        assertEquals(i.getJoueur(0).getNbActions(),2);
+    }
 }
+
+
 
