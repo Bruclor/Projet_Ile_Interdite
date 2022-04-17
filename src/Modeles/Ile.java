@@ -110,6 +110,30 @@ public class Ile extends Grille {
         throw new ArrayIndexOutOfBoundsException();
     }
 
+    /** -- Retourne la liste des joueurs
+     *
+     * @return joueur
+     **/
+    public Joueur[] getJoueurs() {
+        return joueurs;
+    }
+
+    /** -- Retourne la grille
+     *
+     * @return grille
+     **/
+    public Zone[][] getGrille() {
+        return grille;
+    }
+
+    /** -- Retourne la taille de l'ile
+     *
+     * @return taille
+     **/
+    public int getTaille() {
+        return taille;
+    }
+
     /** -- Retourne le joueur en jeu
      *
      * @return joueur en jeu

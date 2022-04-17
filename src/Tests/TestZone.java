@@ -43,7 +43,7 @@ public class TestZone {
         Artefact a = Artefact.Feu;
         Zone z = new Zone(x,y,e,a);
         z.setArtefact(Artefact.Heliport);
-        assertEquals(Artefact.Heliport,z.artefact());
+        assertEquals(Artefact.Feu,z.artefact());
     }
 
     @Test

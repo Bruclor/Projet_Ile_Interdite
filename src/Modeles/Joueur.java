@@ -134,7 +134,7 @@ public class Joueur {
    *
    * @param art cle de l'artefact a retirer
    **/
-  public void perdCle(Artefact art){this.cles.put(art,this.cles.get(art)-1);}
+  public void perdCle(Artefact art){if (this.cles.get(art) > 0) this.cles.put(art,this.cles.get(art)-1);}
 
   /**  -- le joueur gagne une clé d'artefact
    *
@@ -162,14 +162,14 @@ public class Joueur {
 
   /** -- Le joueur effectue une action
    **/
-  public void effectueAction(){ this.nbActions--;}
+  public void effectueAction(){ if (this.nbActions > 0) this.nbActions--;}
 
   /** -- Modifie le nombre d'actions du joueur
    *
    * @param i le nombre d'actions
    */
   public void setNbActions(int i) {
-    this.nbActions = i;
+    if (i >= 0) this.nbActions = i;
   }
 
 }
