@@ -355,7 +355,7 @@ public class Ile extends Grille {
 
     /** -- Un joueur se deplace sur une case adjacente disponible
      **/
-    private void seRattrape(Joueur j) {
+    public void seRattrape(Joueur j) {
         Coord pos = j.coord();
         Vector<Coord> adjacents = pos.adjacents(0, this.taille);
         for (int k=0; k<adjacents.size(); k++) {
