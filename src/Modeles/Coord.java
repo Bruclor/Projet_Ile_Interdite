@@ -115,4 +115,5 @@ public class Coord {
      * @param y nouvelle coord
      */
     public void set_y(int y){this.y = y;}
+
 }
