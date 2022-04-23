@@ -3,6 +3,7 @@ package Modeles;
 import java.awt.*;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Vector;
 
 /* =============================================
  * =                                           =
@@ -24,7 +25,7 @@ public class Joueur {
   private Color couleur;                                                             //Couleur
   private Coord coord;                                                               //Coordonnées
   private int nbActions;                                                             //Actions restantes
-  private Dictionary<Artefact, Integer> cles = new Hashtable<Artefact, Integer>(4);       //Nombre de clés
+  private Dictionary<Objet, Integer> inventaire = new Hashtable<Objet, Integer>(6);       //Nombre d'objets
 
   /*
     ===========================================
@@ -47,10 +48,12 @@ public class Joueur {
     this.nom = nom;
     this.couleur = couleur;
 
-    this.cles.put(Artefact.Air, 0);
-    this.cles.put(Artefact.Feu, 0);
-    this.cles.put(Artefact.Eau, 0);
-    this.cles.put(Artefact.Terre, 0);
+    this.inventaire.put(Objet.CleAir, 0);
+    this.inventaire.put(Objet.CleEau, 0);
+    this.inventaire.put(Objet.CleFeu, 0);
+    this.inventaire.put(Objet.CleTerre, 0);
+    this.inventaire.put(Objet.Helicoptere, 0);
+    this.inventaire.put(Objet.SacDeSable, 0);
 
   }
 
@@ -93,10 +96,10 @@ public class Joueur {
 
   /** -- Nombre de clés d'un type récupéré
    *
-   * @param artefact artefact dont on veut le nombre de cle
+   * @param objet artefact dont on veut le nombre de cle
    * @return la quantité de cle
    **/
-  public int nbCles(Artefact artefact){return this.cles.get(artefact);}
+  public int nbObjets(Objet objet){return this.inventaire.get(objet);}
 
 
   /** -- Retourne le nombre d'actions restantes pour le joueur
@@ -111,6 +114,26 @@ public class Joueur {
    **/
   public Color couleur(){return this.couleur;}
 
+  /** -- Retourne la liste des objets dont le joueur possede au moins une clé
+   *
+   * @return vecteur d'objets de clé
+   */
+  public Vector<Objet> clePossede() {
+    Vector<Objet> mesObjets = new Vector<Objet>(0);
+    if (this.inventaire.get(Objet.CleAir) > 0) {
+      mesObjets.add(Objet.CleAir);
+    }
+    if (this.inventaire.get(Objet.CleEau) > 0) {
+      mesObjets.add(Objet.CleEau);
+    }
+    if (this.inventaire.get(Objet.CleFeu) > 0) {
+      mesObjets.add(Objet.CleFeu);
+    }
+    if (this.inventaire.get(Objet.CleTerre) > 0) {
+      mesObjets.add(Objet.CleTerre);
+    }
+    return mesObjets;
+  }
 
   /*
     ===========================================
@@ -132,15 +155,15 @@ public class Joueur {
 
   /** -- Le joueur tilise une clé d'artefact
    *
-   * @param art cle de l'artefact a retirer
+   * @param objet un objet
    **/
-  public void perdCle(Artefact art){if (this.cles.get(art) > 0) this.cles.put(art,this.cles.get(art)-1);}
+  public void perd(Objet objet, int nb){this.inventaire.put(objet,this.inventaire.get(objet)-nb);}
 
   /**  -- le joueur gagne une clé d'artefact
    *
-   * @param art cle de l'artefact a ajouter
+   * @param objet un objet
    **/
-  public void gagneCle(Artefact art){this.cles.put(art,this.cles.get(art)+1);}
+  public void gagne(Objet objet){this.inventaire.put(objet,this.inventaire.get(objet)+1);}
 
 
   /** -- Deplace le joueur
@@ -156,21 +179,27 @@ public class Joueur {
    *
    * @param artefact artefact a echanger
    **/
-  public void recupereArtefact(Artefact artefact){
-      this.perdCle(artefact);
+  public void recupereArtefact(Artefact artefact, int nbClesUtilises){
+    switch (artefact){
+      case Air : this.perd(Objet.CleAir, nbClesUtilises); break;
+      case Eau : this.perd(Objet.CleEau, nbClesUtilises); break;
+      case Feu : this.perd(Objet.CleFeu, nbClesUtilises); break;
+      case Terre : this.perd(Objet.CleTerre, nbClesUtilises); break;
+    }
   }
 
   /** -- Le joueur effectue une action
    **/
-  public void effectueAction(){ if (this.nbActions > 0) this.nbActions--;}
+  public void effectueAction(){ this.nbActions--;}
 
   /** -- Modifie le nombre d'actions du joueur
    *
    * @param i le nombre d'actions
    */
   public void setNbActions(int i) {
-    if (i >= 0) this.nbActions = i;
+    this.nbActions = i;
   }
+
 
 }
   
