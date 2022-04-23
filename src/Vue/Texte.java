@@ -40,6 +40,18 @@ public class Texte extends JLabel {
         this.setPreferredSize(dimension);
     }
 
+    /** -- Construit un texte avec taillec :
+     *
+     * @param text le texte a afficher
+     * @param color la couleur du texte
+     * @param taille taille du texte
+     */
+    public Texte(String text, Color color, int taille){
+        this.setText(text);
+        this.setForeground(color);
+        this.setFont(new Font("Serif", Font.CENTER_BASELINE, taille));
+    }
+
     /** -- Construit un texte plus complexe avec :
      *
      * @param text le texte a afficher
