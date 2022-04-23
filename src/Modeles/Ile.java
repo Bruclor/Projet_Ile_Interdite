@@ -8,6 +8,8 @@ import java.util.Hashtable;
 import java.util.Random;
 import java.util.Vector;
 
+import static Modeles.Objet.*;
+
 /* =============================================
  * =                                           =
  * =              CLASSE ILE                   =
@@ -24,18 +26,31 @@ public class Ile extends Grille {
       ===========================================
      */
 
+    //Plateau
     private static int taille = 6;                                                             //Taille de la grille
     private Zone[][] grille;                                                                   //Grille de jeu
     private Joueur[] joueurs;                                                                  //Liste des joueurs
+
+    //Parametres
     private int nbArtefacts;                                                                   //Nombre d'artefacts
     private int nbJoueurs;                                                                     //Nombre de joueurs
+    private boolean utiliserActionsSpeciales;
+    private int nbClesEchanges;
+
+    //Paquets de carte
+    private Paquet<Objet> piocheObjets;                                                        //La pioche des objets
+    private Paquet<Coord> piocheCase;                                                          //La pioche des zones
+
+    //Statut
     private int idJoueurEnJeu;                                                                 //id du joueur en jeu
     private Dictionary<Artefact, Integer> artefactsAccessibles = new Hashtable(4);  //nb artefacts disponibles
     private Dictionary<Artefact, Boolean> artefactsRecuperes = new Hashtable(4);    //artefacts de l'équipe
-    private ChangeParametre param = ChangeParametre.Joueurs;                                   //Le parametre modifié
     private boolean gameOver;                                                                  //Defaite de la partie
     private String infoGameOver;                                                               //Raison de la defaite
     private boolean isWin;                                                                     //Victoire de la partie
+    private Coord coordSelect;                                                                 //coordonnée selectionnee
+    private int idJoueurEchange;                                                               //id du joueur de l'echange
+    private Objet cleEchange;                                                                  //objet de l'echange
 
     /*
       ===========================================
@@ -47,12 +62,15 @@ public class Ile extends Grille {
      * @param nbJoueurs nombre de joueurs
      * @param nbArtefacts nombre d'artefacts de chaque type
      **/
-    public Ile(int nbJoueurs, int nbArtefacts) {
+    public Ile(int nbJoueurs, int nbArtefacts, boolean UAS, int nbClesEchanges) {
         super(taille, taille);
         this.nbJoueurs = nbJoueurs;
         this.nbArtefacts = nbArtefacts;
-        this.taille = taille;
+        this.utiliserActionsSpeciales = UAS;
+        this.nbClesEchanges = nbClesEchanges;
         this.grille = new Zone[this.taille][this.taille];
+        this.createPiocheObjets();
+        this.createPiocheCase();
         this.gameOver = false;
         for (int x = 0; x < this.taille; x++) {
             for (int y = 0; y < this.taille; y++) {
@@ -98,6 +116,17 @@ public class Ile extends Grille {
      */
     public int getNbArtefacts(){return this.nbArtefacts;}
 
+    /** -- option "utilisation des actions speciales"
+     *
+     * @return booleen vrai si option activee
+     */
+    public boolean utiliseActionsSpe(){return this.utiliserActionsSpeciales;}
+
+    /** -- nombre de cless à utiliser pour obtenir un artefact
+     *
+     * @return le nombre d'artefacts à utiliser
+     */
+    public int getNbClesEchanges(){return this.nbClesEchanges;}
 
     /** -- Retourne le joueur d'identifiant k
      *
@@ -108,30 +137,6 @@ public class Ile extends Grille {
             return joueurs[k];
         }
         throw new ArrayIndexOutOfBoundsException();
-    }
-
-    /** -- Retourne la liste des joueurs
-     *
-     * @return joueur
-     **/
-    public Joueur[] getJoueurs() {
-        return joueurs;
-    }
-
-    /** -- Retourne la grille
-     *
-     * @return grille
-     **/
-    public Zone[][] getGrille() {
-        return grille;
-    }
-
-    /** -- Retourne la taille de l'ile
-     *
-     * @return taille
-     **/
-    public int getTaille() {
-        return taille;
     }
 
     /** -- Retourne le joueur en jeu
@@ -152,6 +157,7 @@ public class Ile extends Grille {
     public Zone zone(int x, int y) {
         return grille[x][y];
     }
+
     /** -- Retourne la zone de coord (x, y) dans la grille
      *
      * @param coord coordonnées
@@ -161,8 +167,6 @@ public class Ile extends Grille {
     public Zone zone(Coord coord){
         return grille[coord.x()][coord.y()];
     }
-
-
 
     /** -- Retourne un vecteur des zones non submergées
      *
@@ -187,14 +191,6 @@ public class Ile extends Grille {
      **/
     public Dictionary<Artefact, Boolean> getArtefactsRecuperes(){return this.artefactsRecuperes;}
 
-    /** -- Indique le type de parametrage effectué
-     *
-     * @param p le type de parametrage
-     *
-     * @return le idctionnaire des artefacts recuperes
-     */
-    public void parametrage(ChangeParametre p){this.param = p;}
-
 
     /** -- Indique si l'équipe a perdu
      *
@@ -213,6 +209,28 @@ public class Ile extends Grille {
      * @return booleen vrai si la partie est gagnée
      */
     public boolean IsWin(){return this.isWin;}
+
+    /** -- Indique la coordonnée de selection (pour selectionner une zone)
+     *
+     * @return coordonnée de selection
+     */
+    public Coord selected(){return this.coordSelect;}
+
+    public Vector<Integer> idJoueursSurMaCase(){
+        Joueur j = this.joueurEnJeu();
+        Coord pos = j.coord();
+        Vector<Integer> idJSMC = new Vector<Integer>(0);
+        for(int k=0; k<this.joueurs.length; k++){
+            if (this.getJoueur(k).coord().equals(pos) && k!=j.id()){
+                idJSMC.add(k);
+            }
+        }
+        return  idJSMC;
+    }
+
+    public int idJoueurEchange(){return this.idJoueurEchange;}
+
+    public Objet objetEchange(){return this.cleEchange;}
 
     /*
       ===========================================
@@ -289,13 +307,73 @@ public class Ile extends Grille {
 
     }
 
-    /** -- Ajoute un artefact a l'inventaire
-     *
-     * @param art Artefact a ajouter
-     **/
-    public void ajouteArtefact(Artefact art) {
-        this.artefactsRecuperes.put(art,true);
+    /** -- Methode d'initialisation du paquet de cartes pour les cases
+     */
+    public void createPiocheCase(){
+        this.piocheCase = new Paquet<Coord>();
+        for (int x=0; x<this.taille; x++){
+            for (int y=0; y<this.taille; y++){
+                this.piocheCase.addCarte(new Coord(x,y));
+            }
+        }
+        this.piocheCase.melangePaquet();
     }
+
+    /** -- Methode d'initialisation du paquet de cartes pour les objets
+     */
+    public void createPiocheObjets() {
+        this.piocheObjets = new Paquet<Objet>();
+                                                             //Dans les regles du jeu :
+        for (int k = 0; k < 5; k++) {
+            this.piocheObjets.addCarte(CleAir);        //5 cartes artefacts de chaque type
+            this.piocheObjets.addCarte(CleFeu);
+            this.piocheObjets.addCarte(Objet.CleTerre);
+            this.piocheObjets.addCarte(CleEau);
+        }
+        if (this.utiliserActionsSpeciales) {
+            this.piocheObjets.addCarte(Objet.Helicoptere);    //3 cartes helicoptere
+            this.piocheObjets.addCarte(Objet.Helicoptere);
+            this.piocheObjets.addCarte(Objet.Helicoptere);
+            this.piocheObjets.addCarte(Objet.SacDeSable);     //2 cartes sac de sable
+            this.piocheObjets.addCarte(Objet.SacDeSable);
+            this.piocheObjets.addCarte(Objet.MonteeDesEaux);  //3 cartes montee des eaux
+            this.piocheObjets.addCarte(Objet.MonteeDesEaux);
+            this.piocheObjets.addCarte(Objet.MonteeDesEaux);
+        } else {
+            for (int k = 0; k < 8; k++) {
+                this.piocheObjets.addCarte(Objet.Rien);
+            }
+        }
+        this.piocheObjets.melangePaquet();
+    }
+
+    /** -- Ajoute un joueur
+     */
+    public void addJoueur(){if (this.nbJoueurs < 4) this.nbJoueurs++;}
+
+    /** -- Enleve un joueur
+     */
+    public void removeJoueur(){if (this.nbJoueurs > 1) this.nbJoueurs--;}
+
+    /** -- Ajoute un set complet d'artefact
+     */
+    public void addArtefact(){if (this.nbArtefacts < 4) this.nbArtefacts++;}
+
+    /** -- Enleve un set complet d'artefact
+     */
+    public void removeArtefact(){if (this.nbArtefacts > 1) this.nbArtefacts--;}
+
+    /** -- Change l'option d'utilisation des actions speciales
+     */
+    public void changeUtiliseActionsSpe(){this.utiliserActionsSpeciales = !this.utiliserActionsSpeciales;}
+
+    /** -- Incremente le nombre de cles nécessaires à l'échange
+     */
+    public void addNbEchange(){if (this.nbClesEchanges< 4) this.nbClesEchanges++;}
+
+    /** -- Decrement le nombre de cles necessaires à l'échange
+     */
+    public void removeNbEchange(){if (this.nbClesEchanges > 1) this.nbClesEchanges--;}
 
     /** -- Deplace le joueur en jeu vers une zone de destination
      *
@@ -341,21 +419,50 @@ public class Ile extends Grille {
         }
     }
 
+    /** -- Un joueur asseche une zone
+     *
+     * @param selection vecteurDirection de la zone a assecher
+     **/
+    public void sacDeSable(Coord selection) {
+        Zone zone = zone(selection);
+        Joueur j = joueurEnJeu();
+        if (zone.etat() == Etat.Inondee) {
+            zone.asseche();
+            j.perd(Objet.SacDeSable, 1);
+        }
+    }
+
+    /** -- Un joueur asseche une zone
+     *
+     * @param selection vecteurDirection de la zone a assecher
+     **/
+    public void helicoptere(Coord selection) {
+        Zone zone = zone(selection);
+        Joueur j = joueurEnJeu();
+        if (zone.etat() != Etat.Submergee) {
+            zone(j.x(), j.y()).removeJoueur(j);
+            j.deplace(selection);
+            j.perd(Objet.Helicoptere, 1);
+            zone(selection).addJoueur(j);
+            this.checkWin();
+        }
+    }
+
     /** -- Un joueur cherche une clé
      **/
-    public void chercheCle() {
+    public Objet recupereObjet() {
         Joueur j  = this.joueurEnJeu();
-        Random random = new Random();
-        int r = random.nextInt(5);
-        if (r == 0) j.gagneCle(Artefact.Air);
-        if (r == 1) j.gagneCle(Artefact.Eau);
-        if (r == 2) j.gagneCle(Artefact.Feu);
-        if (r == 3) j.gagneCle(Artefact.Terre);
+        Objet obj = this.piocheObjets.piocheUneCarte();
+        if (obj == Objet.MonteeDesEaux){this.piocheCase.melangePaquet();}
+        else if (obj != Objet.Rien){
+            j.gagne(obj);
+        }
+        return obj;
     }
 
     /** -- Un joueur se deplace sur une case adjacente disponible
      **/
-    public void seRattrape(Joueur j) {
+    private void seRattrape(Joueur j) {
         Coord pos = j.coord();
         Vector<Coord> adjacents = pos.adjacents(0, this.taille);
         for (int k=0; k<adjacents.size(); k++) {
@@ -374,28 +481,26 @@ public class Ile extends Grille {
     /** -- Inonde trois cases differentes et termine le tour
      **/
     public void finDeTour() {
-        Vector<Zone> dispo = this.getZonesDispo();
-        Random random = new Random();
-        int alea = -1;
-        int nb = 0;
-        while (dispo.size() > 0 && nb < 3) {
-            nb++;
-            alea = random.nextInt(dispo.size());
-            Zone zoneAlea = dispo.get(alea);
-            zoneAlea.inonde();
-            Artefact a = zoneAlea.artefact();
-            if (zoneAlea.etat() == Etat.Submergee && a != Artefact.Vide) {
+        Zone zonePiochee;
+        for (int nb=0; nb<3; nb++){
+            zonePiochee = zone(this.piocheCase.piocheUneCarte());
+            while (zonePiochee.etat() == Etat.Submergee){
+                piocheCase.removeCartePiochee();
+                zonePiochee = zone(this.piocheCase.piocheUneCarte());
+            }
+            zonePiochee.inonde();
+            Artefact a = zonePiochee.artefact();
+            if (zonePiochee.etat() == Etat.Submergee && a != Artefact.Vide) {
                 if (a == Artefact.Heliport) {
                     this.setGameOver("L'heliport a été submergé !");
                 } else {
                     int nbArtDispo = this.artefactsAccessibles.get(a);
                     this.artefactsAccessibles.put(a, nbArtDispo-1);
-                    if ((!this.getArtefactsRecuperes().get(zoneAlea.artefact())) && this.artefactsAccessibles.get(a)==0) {
+                    if ((!this.getArtefactsRecuperes().get(zonePiochee.artefact())) && this.artefactsAccessibles.get(a)==0) {
                         this.setGameOver("Un artefact a été perdu !");
                     }
                 }
             }
-            dispo.remove(alea);
         }
         for (int k=0; k<joueurs.length; k++) {
             Joueur j = joueurs[k];
@@ -404,7 +509,6 @@ public class Ile extends Grille {
             }
         }
         this.joueurSuivant();
-
     }
 
     /** -- Passage au joueur suivant
@@ -453,31 +557,104 @@ public class Ile extends Grille {
         Joueur j = this.joueurEnJeu();
         Artefact artZone = this.zone(j.coord()).artefact();
         if (artZone != Artefact.Heliport && artZone != Artefact.Vide){
-            if (j.nbCles(artZone) > 0 && j.getNbActions()>0){
-                j.recupereArtefact(artZone);
+            Objet utilise = Objet.Rien;
+            switch (artZone){
+                case Air : utilise = Objet.CleAir; break;
+                case Eau : utilise = Objet.CleEau; break;
+                case Feu : utilise = Objet.CleFeu; break;
+                case Terre : utilise = Objet.CleTerre; break;
+            }
+            if (j.nbObjets(utilise) >= this.getNbClesEchanges() && j.getNbActions()>0){
+                j.recupereArtefact(artZone, this.getNbClesEchanges());
                 this.artefactsRecuperes.put(artZone, true);
                 j.effectueAction();
             }
         }
     }
 
-    /** -- Modifie la valeur du parametre concerné
-     *
-     * @param n entier
+    /** -- Procedure d'initialisation de la selection
      */
-    public void operateParam(int n){
+    public void initSelect(){
+        this.coordSelect = this.joueurEnJeu().coord();
+        zone(this.coordSelect).select();
 
-        switch (this.param){
+    }
 
-            case Joueurs :
-                this.nbJoueurs = n;
+    /** -- Le joueur en jeu donne une clé a un joueur
+     *
+     * @param idJoueur
+     * @param objet
+     */
+    public void donneCleAuJoueur(int idJoueur, Objet objet){
+        Joueur j = this.joueurEnJeu();
+        j.perd(objet, 1);
+        this.getJoueur(idJoueur).gagne(objet);
+    }
+
+    /** -- Deplacement de la selection
+     *
+     * @param vectDirection vecteur direction du deplacement
+     */
+    public void select(Coord vectDirection){
+        int x = this.coordSelect.x()+vectDirection.x();
+        int y = this.coordSelect.y()+vectDirection.y();
+        if (x >= 0  && x<this.taille && y >= 0 && y<this.taille){
+            zone(this.coordSelect).quit();
+            this.coordSelect = new Coord(x, y);
+            zone(x,y).select();
+        }
+
+    }
+
+    /** -- procedure de fin de la selection
+     */
+    public void validate(){
+        zone(this.coordSelect).quit();
+    }
+
+    /** -- Modifie l'identifiant du joueur de l'echange de clé
+     *
+     * @param i un identifiant de joueur
+     */
+    public void setIdJoueurEchange(int i){this.idJoueurEchange = i;}
+
+    /** -- recherche le prochain joueur possible de l'echange
+     */
+    public void nextJoueurEchange(){
+        Vector<Integer> JSMC = this.idJoueursSurMaCase();
+        for (int k=0; k<JSMC.size(); k++){
+            if (JSMC.get(k) == this.idJoueurEchange){
+                if (k == JSMC.size()-1){this.idJoueurEchange = JSMC.get(0);}
+                else {this.idJoueurEchange = JSMC.get(k+1);}
                 break;
-
-            case Artefacts :
-                this.nbArtefacts = n;
-                break;
+            }
         }
     }
 
+    /** -- Modifie l'objet de l'echange de clé
+     *
+     * @param o un objet
+     */
+    public void setObjetEchange(Objet o){this.cleEchange = o;}
+
+    /** -- recherche le prochain objet possible de l'échange
+     */
+    public void nextObjetEchange(){
+        Vector<Objet> MO = this.joueurEnJeu().clePossede();
+        for (int k=0; k<MO.size(); k++){
+            if (MO.get(k) == this.objetEchange()){
+                if (k == MO.size()-1){this.cleEchange = MO.get(0);}
+                else {this.cleEchange = MO.get(k+1);}
+                break;
+            }
+        }
+    }
+    /** -- Le joueur en jeu donne une clé de l'objet echange au joueur de l'echange,
+     */
+    public void donneCle(){
+        this.joueurEnJeu().perd(this.objetEchange(),1);
+        this.joueurEnJeu().effectueAction();
+        this.getJoueur(this.idJoueurEchange).gagne(this.objetEchange());
+    }
 
 }
