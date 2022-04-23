@@ -23,6 +23,7 @@ public class Zone extends JPanel {
     private Etat etat;                                           //Etat de la zone
     private Artefact artefact;                                   //Artefact présent sur la zone
     private Vector<Joueur> joueurs;                              //Joueurs présents sur la zone
+    private boolean isSelected;
 
     /*
       ===========================================
@@ -109,20 +110,20 @@ public class Zone extends JPanel {
      * @param g Un graphic
      **/
     public void paintComponent(Graphics g){
-        g.setColor(Color.BLUE.darker());
-        g.fillRect(0, 0, 99,99);
-        if (this.etat()!=Etat.Submergee) {
-            if (this.etat == Etat.Inondee) {
-                g.setColor(new Color(100, 120, 240));
-                g.fillRect(0, 0, 99, 99);
-            } else if (this.etat == Etat.Normale) {
-                g.setColor(Color.GREEN.darker().darker());
-                g.fillRect(0, 0, 99, 99);
+        g.setColor(Color.BLUE.darker());                               //Par defaut la case est submergée (Bleu foncé)
+        g.fillRect(0, 0, 99,99);                     //La taille d'une case : 100x100
+        if (this.etat()!=Etat.Submergee) {                             //Si la case n'est pas submergée
+            if (this.etat == Etat.Inondee) {                           //Cas Inondee :
+                g.setColor(new Color(100, 120, 240));                  //Un bleu un peu plus clair...
+                g.fillRect(0, 0, 99, 99);                    //...sur l'ensemble de la case
+            } else if (this.etat == Etat.Normale) {                    //Cas normale :
+                g.setColor(Color.GREEN.darker().darker());                      //Couleur verte...
+                g.fillRect(0, 0, 99, 99);                    //... sur l'ensemble de la case
             }
 
             if (this.artefact != Artefact.Vide) {
-                if (this.artefact == Artefact.Heliport) {
-                    g.setColor(Color.YELLOW);
+                if (this.artefact == Artefact.Heliport) {              //S'il y a un héliport...
+                    g.setColor(Color.YELLOW);                               //On dessine un héliport...
                     g.fillOval(5, 5, 80, 80);
                     g.setColor(Color.WHITE.darker().darker());
                     g.fillOval(10, 10, 70, 70);
@@ -133,10 +134,17 @@ public class Zone extends JPanel {
                 }
 
             }
-            for (int id = 0; id < this.joueurs.size(); id++) {
-                g.setColor(joueurs.get(id).couleur());
-                g.fillOval(id * 20 + 5, 85 - (id + 1) * 20, 20, 20);
+            for (int id = 0; id < this.joueurs.size(); id++) {        //Pour chaque joueur présents sur la case...
+                g.setColor(joueurs.get(id).couleur());                       //On recupere sa couleur (mise en attribut de 'joueur')
+                g.fillOval(id * 20 + 5, 85 - (id + 1) * 20, 20, 20); //On dessine un rond de cette couleur
             }
+
+        }
+        if (this.isSelected){
+            g.setColor(Color.GREEN);
+            g.drawRect(0, 0, 92, 88);
+            g.drawRect(1, 1, 90, 86);
+            g.drawRect(2, 2, 88, 84);
         }
     }
 
@@ -207,4 +215,11 @@ public class Zone extends JPanel {
         this.joueurs.remove(j);
     }
 
+    /** -- Selectionne la zone
+     */
+    public void select(){this.isSelected = true;}
+
+    /** -- La case n'est plus selectionne
+     */
+    public void quit(){this.isSelected = false;}
 }
