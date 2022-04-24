@@ -151,7 +151,7 @@ public class TestIle {
         assertEquals(i.infoGameOver(),"Test");
     }
 
-    /*@Test
+    @Test
     public void testAjouteArtefact(){
         int nbJ = 2;
         int nbA = 4;
@@ -210,7 +210,7 @@ public class TestIle {
         i.artefactRecupere();
         assertTrue(i.getArtefactsRecuperes().get(Artefact.Feu));
         assertEquals(i.getJoueur(0).getNbActions(),2);
-    }*/
+    }
 }
 
 
