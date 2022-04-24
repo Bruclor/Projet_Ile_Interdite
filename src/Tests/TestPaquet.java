@@ -46,16 +46,4 @@ public class TestPaquet {
         assertEquals(0, p.getNbCartes());
         assertEquals(null, p.getNextPioche());
     }
-
-    @Test
-    public void TestMelange(){
-        Integer e = 5;
-        Integer l = 6;
-        Paquet<Integer> p = new Paquet<Integer>();
-        p.addCarte(e);
-        p.addCarte(l);
-        p.melangePaquet();
-        assertEquals(2, p.getNbCartes());
-        assertEquals(e, p.piocheUneCarte());
-    }
 }
