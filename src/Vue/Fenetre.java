@@ -388,8 +388,8 @@ public class Fenetre extends JFrame {
 
         switch (objet){
             case CleAir : texte += " obtient une clé Air"; break;
-            case CleEau : texte += " obtient une clé Feu"; break;
-            case CleFeu : texte += " obtient une clé Eau"; break;
+            case CleEau : texte += " obtient une clé Eau"; break;
+            case CleFeu : texte += " obtient une clé Feu"; break;
             case CleTerre : texte += " obtient une clé Terre"; break;
             case Helicoptere : texte += " peut prendre un helicoptere"; break;
             case SacDeSable : texte += " obtient un sac de sable"; break;
@@ -418,7 +418,7 @@ public class Fenetre extends JFrame {
         String tObjet = "";
         switch (objet){
             case CleAir : tObjet = "Cle Air"; break;
-            case CleEau : tObjet = "Cle Air"; break;
+            case CleEau : tObjet = "Cle Eau"; break;
             case CleFeu : tObjet = "Cle Feu"; break;
             case CleTerre : tObjet = "Cle Terre"; break;
         }
