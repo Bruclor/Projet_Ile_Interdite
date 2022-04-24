@@ -73,7 +73,7 @@ __Le jeu prend egalement en charge certaines extensions du sujet :__
     -Le dossier "Modeles" contient tous les objets correspondant au probleme et qui contiennent les données relatives à celui-ci :
       * La classe Coord                 : représentation des coordonnées d'une grille
       * La classe Joueur                : représentation d'un joueur 
-      * La classe Zone (extends JPanel) : représentation d'une zone de la grille 
+      * La classe Zone (extends Panneau) : représentation d'une zone de la grille 
       * La classe Ile (extends Grille)  : représentation de l'ile
       * La classe Paquet<T>             : classe générique representant un paquet de carte d'éléments T 
       * L'enumeration Artefact          : représentaion des artefacts présent sur une zone (Eau, Feu, Terre, Air, Vide, Heliport)
