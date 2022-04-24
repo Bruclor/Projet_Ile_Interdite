@@ -192,7 +192,7 @@ public class TestIle {
         i.getJoueur(1).deplace(new Coord(x,y));
         i.checkWin();
         assertTrue(i.IsWin());
-    }*/
+    }
 
     @Test
     public void testArtefactRecupere(){
@@ -210,7 +210,7 @@ public class TestIle {
         i.artefactRecupere();
         assertTrue(i.getArtefactsRecuperes().get(Artefact.Feu));
         assertEquals(i.getJoueur(0).getNbActions(),2);
-    }
+    }*/
 }
 
 
