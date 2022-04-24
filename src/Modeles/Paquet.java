@@ -40,6 +40,37 @@ public class Paquet<T> {
         this.nextPioche = null;      //Pioche vide
         this.nextDefausse = null;    //Defausse vide
     }
+
+    /*
+      ===========================================
+      =                 GETTER                  =
+      ===========================================
+     */
+
+    /** -- Renvoie le nombre de cartes
+     *
+     * @return nombre de cartes
+     */
+    public int getNbCartes() {
+        return nbCartes;
+    }
+
+
+    /** -- Renvoie la prochaine carte de la pioche
+     *
+     * @return prochaine pioche
+     */
+    public Carte getNextPioche() {
+        return nextPioche;
+    }
+
+    /** -- Renvoie la prochaine carte de la défausse
+     *
+     * @return prochaine defausse
+     */
+    public Carte getNextDefausse() {
+        return nextDefausse;
+    }
     /*
       ===========================================
       =                 SETTER                  =
