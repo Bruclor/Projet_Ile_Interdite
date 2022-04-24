@@ -1,5 +1,7 @@
 package Modeles;
 
+import Vue.Panneau;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
@@ -11,7 +13,7 @@ import java.util.Vector;
  * =============================================
  */
 
-public class Zone extends JPanel {
+public class Zone extends Panneau {
 
     /*
       ===========================================
@@ -39,6 +41,7 @@ public class Zone extends JPanel {
      * @param artefact Artefact (Air, Terre, Feu, Eau), Heliport ou Vide
      **/
     public Zone(int x, int y, Etat etat, Artefact artefact){
+        super(Color.WHITE);
         this.etat = etat;
         this.artefact = artefact;
         this.coord = new Coord(x, y);
