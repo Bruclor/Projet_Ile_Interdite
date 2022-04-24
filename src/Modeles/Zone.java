@@ -25,7 +25,7 @@ public class Zone extends Panneau {
     private Etat etat;                                           //Etat de la zone
     private Artefact artefact;                                   //Artefact présent sur la zone
     private Vector<Joueur> joueurs;                              //Joueurs présents sur la zone
-    private boolean isSelected;
+    private boolean isSelected;                                  //La zone est selectionnee
 
     /*
       ===========================================
