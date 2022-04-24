@@ -157,13 +157,18 @@ public class Joueur {
    *
    * @param objet un objet
    **/
-  public void perd(Objet objet, int nb){this.inventaire.put(objet,this.inventaire.get(objet)-nb);}
+  public void perd(Objet objet, int nb){
+    if (this.inventaire.get(Objet.CleFeu) > nb)
+      this.inventaire.put(objet,this.inventaire.get(objet)-nb);
+  }
 
   /**  -- le joueur gagne une clé d'artefact
    *
    * @param objet un objet
    **/
-  public void gagne(Objet objet){this.inventaire.put(objet,this.inventaire.get(objet)+1);}
+  public void gagne(Objet objet){
+    this.inventaire.put(objet,this.inventaire.get(objet)+1);
+  }
 
 
   /** -- Deplace le joueur
@@ -190,14 +195,15 @@ public class Joueur {
 
   /** -- Le joueur effectue une action
    **/
-  public void effectueAction(){ this.nbActions--;}
+  public void effectueAction(){ if (nbActions > 0) nbActions--;}
 
   /** -- Modifie le nombre d'actions du joueur
    *
    * @param i le nombre d'actions
    */
   public void setNbActions(int i) {
-    this.nbActions = i;
+    if (i > 0)
+      this.nbActions = i;
   }
 
 

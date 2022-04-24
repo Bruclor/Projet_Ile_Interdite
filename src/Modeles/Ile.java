@@ -61,6 +61,8 @@ public class Ile extends Grille {
     /** -- Construit l'ile du jeu
      * @param nbJoueurs nombre de joueurs
      * @param nbArtefacts nombre d'artefacts de chaque type
+     * @param UAS accord pour les actions spéciales
+     * @param nbClesEchanges nombre de clé pour échanger artefact
      **/
     public Ile(int nbJoueurs, int nbArtefacts, boolean UAS, int nbClesEchanges) {
         super(taille, taille);
@@ -115,6 +117,18 @@ public class Ile extends Grille {
      * @return le nombre d'artefacts
      */
     public int getNbArtefacts(){return this.nbArtefacts;}
+
+    /** --Retourne la grille
+     *
+     * @return la grille
+     */
+    public Zone[][] getGrille() {return this.grille;}
+
+    /** --Retourne la liste des joueurs
+     *
+     * @return la liste des joueurs
+     */
+    public Joueur[] getJoueurs() {return joueurs;}
 
     /** -- option "utilisation des actions speciales"
      *

@@ -2,12 +2,14 @@ package Tests;
 import static org.junit.Assert.*;
 
 import Modeles.Artefact;
+import Modeles.Objet;
 import org.junit.Test;
 
 import Modeles.Coord;
 import Modeles.Joueur;
 
 import java.awt.*;
+import java.util.Vector;
 
 public class TestJoueur {
     @Test
@@ -23,10 +25,12 @@ public class TestJoueur {
         assertEquals(x,j.x());
         assertEquals(y,j.y());
         assertEquals(col,j.couleur());
-        assertEquals(0,j.nbCles(Artefact.Feu));
-        assertEquals(0,j.nbCles(Artefact.Air));
-        assertEquals(0,j.nbCles(Artefact.Eau));
-        assertEquals(0,j.nbCles(Artefact.Terre));
+        assertEquals(0,j.nbObjets(Objet.CleFeu));
+        assertEquals(0,j.nbObjets(Objet.CleAir));
+        assertEquals(0,j.nbObjets(Objet.CleEau));
+        assertEquals(0,j.nbObjets(Objet.CleTerre));
+        assertEquals(0,j.nbObjets(Objet.Helicoptere));
+        assertEquals(0,j.nbObjets(Objet.SacDeSable));
     }
 
     @Test
@@ -45,13 +49,13 @@ public class TestJoueur {
         int x = 2; int y = 3;
         Coord c = new Coord (x,y);
         Joueur j = new Joueur(1,"Toto",c,Color.BLUE);
-        j.perdCle(Artefact.Feu);
-        assertEquals(0,j.nbCles(Artefact.Feu));
-        j.gagneCle(Artefact.Feu);
-        j.gagneCle(Artefact.Feu);
-        assertEquals(2,j.nbCles(Artefact.Feu));
-        j.perdCle(Artefact.Feu);
-        assertEquals(1,j.nbCles(Artefact.Feu));
+        j.perd(Objet.CleFeu,1);
+        assertEquals(0,j.nbObjets(Objet.CleFeu));
+        j.gagne(Objet.CleFeu);
+        j.gagne(Objet.CleFeu);
+        assertEquals(2,j.nbObjets(Objet.CleFeu));
+        j.perd(Objet.CleFeu,1);
+        assertEquals(1,j.nbObjets(Objet.CleFeu));
     }
 
     @Test
@@ -79,5 +83,19 @@ public class TestJoueur {
         assertEquals(0,j.getNbActions());
         j.setNbActions(-2);
         assertEquals(0,j.getNbActions());
+    }
+
+    @Test
+    public void TestClePossede(){
+        int x = 2; int y = 3;
+        Coord c = new Coord (x,y);
+        Joueur j = new Joueur(1,"Toto",c,Color.BLUE);
+        j.gagne(Objet.CleFeu);
+        j.gagne(Objet.CleAir);
+        j.gagne(Objet.CleAir);
+        Vector<Objet> v = j.clePossede();
+        assertEquals(v.get(0),Objet.CleAir);
+        assertEquals(v.get(1),Objet.CleFeu);
+        assertEquals(v.size(),2);
     }
 }
