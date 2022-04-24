@@ -158,7 +158,6 @@ public class Joueur {
    * @param objet un objet
    **/
   public void perd(Objet objet, int nb){
-    if (this.inventaire.get(Objet.CleFeu) > nb)
       this.inventaire.put(objet,this.inventaire.get(objet)-nb);
   }
 

@@ -207,9 +207,94 @@ public class TestIle {
         i.zone(x,y).setArtefact(Artefact.Feu);
         i.getJoueur(0).deplace(new Coord(x,y));
         i.getJoueur(0).gagne(Objet.CleFeu);
+        i.getJoueur(0).gagne(Objet.CleFeu);
+        i.getJoueur(0).gagne(Objet.CleFeu);
         i.artefactRecupere();
         assertTrue(i.getArtefactsRecuperes().get(Artefact.Feu));
         assertEquals(i.getJoueur(0).getNbActions(),2);
+    }
+
+    @Test
+    public void recupereObjet(){
+        int nbJ = 2;
+        int nbA = 4;
+        Ile i = new Ile(nbJ,nbA,true,3);
+        i.InitJoueurs();
+        i.InitArtefacts();
+        Paquet<Objet> p = new Paquet<Objet>();
+        p.addCarte(Objet.CleFeu);
+        i.setPiocheObjets(p);
+        i.recupereObjet();
+        assertEquals(i.getJoueur(0).clePossede().get(0),Objet.CleFeu);
+        assertEquals(i.getJoueur(0).clePossede().size(),1);
+    }
+
+    @Test
+    public void TestSacDeSable(){
+        int nbJ = 2;
+        int nbA = 4;
+        Ile i = new Ile(nbJ,nbA,true,3);
+        i.InitJoueurs();
+        i.InitArtefacts();
+        int x1 = 1; int y1 = 1;
+        int x3 = 3; int y3 = 3;
+        i.getJoueur(0).deplace(new Coord(x1,y1));
+        i.zone(x3,x3).inonde();
+        i.sacDeSable(new Coord(x3,y3));
+        assertEquals(Etat.Inondee,i.zone(x3,x3).etat());
+        Paquet<Objet> p = new Paquet<Objet>();
+        p.addCarte(Objet.SacDeSable);
+        i.setPiocheObjets(p);
+        i.recupereObjet();
+        i.sacDeSable(new Coord(x3,y3));
+        assertEquals(Etat.Normale,i.zone(x3,x3).etat());
+    }
+
+    @Test
+    public void TestHelicoptere(){
+        int nbJ = 2;
+        int nbA = 4;
+        Ile i = new Ile(nbJ,nbA,true,3);
+        i.InitJoueurs();
+        i.InitArtefacts();
+        int x1 = 1; int y1 = 1;
+        int x3 = 3; int y3 = 3;
+        i.getJoueur(0).deplace(new Coord(x1,y1));
+        i.zone(x3,x3).inonde();
+        i.helicoptere(new Coord(x3,y3));
+        assertEquals(i.getJoueur(0).x(),x1);
+        assertEquals(i.getJoueur(0).y(),y1);
+        Paquet<Objet> p = new Paquet<Objet>();
+        p.addCarte(Objet.Helicoptere);
+        i.setPiocheObjets(p);
+        i.recupereObjet();
+        i.helicoptere(new Coord(x3,y3));
+        assertEquals(i.getJoueur(0).x(),x3);
+        assertEquals(i.getJoueur(0).y(),y3);
+    }
+
+    @Test
+    public void TestDonneCle(){
+        int nbJ = 2;
+        int nbA = 4;
+        Ile i = new Ile(nbJ,nbA,true,3);
+        i.InitJoueurs();
+        i.InitArtefacts();
+        int x = 1; int y = 1;
+        i.getJoueur(0).deplace(new Coord(x,y));
+        i.getJoueur(1).deplace(new Coord(x,y));
+        Paquet<Objet> p = new Paquet<Objet>();
+        p.addCarte(Objet.CleFeu);
+        i.setPiocheObjets(p);
+        i.recupereObjet();
+        i.setObjetEchange(Objet.CleFeu);
+        i.setIdJoueurEchange(1);
+        assertEquals(i.getJoueur(0).nbObjets(Objet.CleFeu),1);
+        i.donneCle();
+        assertEquals(i.getJoueur(0).nbObjets(Objet.CleFeu),0);
+        assertEquals(i.getJoueur(0).getNbActions(),2);
+        assertEquals(i.getJoueur(1).clePossede().get(0),Objet.CleFeu);
+        assertEquals(i.getJoueur(1).clePossede().size(),1);
     }
 }
 

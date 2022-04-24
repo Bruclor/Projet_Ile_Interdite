@@ -49,8 +49,6 @@ public class TestJoueur {
         int x = 2; int y = 3;
         Coord c = new Coord (x,y);
         Joueur j = new Joueur(1,"Toto",c,Color.BLUE);
-        j.perd(Objet.CleFeu,1);
-        assertEquals(0,j.nbObjets(Objet.CleFeu));
         j.gagne(Objet.CleFeu);
         j.gagne(Objet.CleFeu);
         assertEquals(2,j.nbObjets(Objet.CleFeu));

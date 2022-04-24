@@ -321,6 +321,14 @@ public class Ile extends Grille {
 
     }
 
+    /** -- Setter Paquet Objet
+     *
+     * @param p pioche objet
+     **/
+    public void setPiocheObjets(Paquet<Objet> p){
+        this.piocheObjets = p;
+    }
+
     /** -- Methode d'initialisation du paquet de cartes pour les cases
      */
     public void createPiocheCase(){
@@ -448,7 +456,7 @@ public class Ile extends Grille {
     public void sacDeSable(Coord selection) {
         Zone zone = zone(selection);
         Joueur j = joueurEnJeu();
-        if (zone.etat() == Etat.Inondee) {
+        if (zone.etat() == Etat.Inondee && j.nbObjets(SacDeSable) > 0) {
             zone.asseche();
             j.perd(Objet.SacDeSable, 1);
         }
@@ -461,7 +469,7 @@ public class Ile extends Grille {
     public void helicoptere(Coord selection) {
         Zone zone = zone(selection);
         Joueur j = joueurEnJeu();
-        if (zone.etat() != Etat.Submergee) {
+        if (zone.etat() != Etat.Submergee && j.nbObjets(Helicoptere) > 0) {
             zone(j.x(), j.y()).removeJoueur(j);
             j.deplace(selection);
             j.perd(Objet.Helicoptere, 1);
